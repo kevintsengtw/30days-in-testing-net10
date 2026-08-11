@@ -1,0 +1,44 @@
+# 老派軟體工程師的測試修練 — 30 天挑戰（.NET 10 版）
+
+「重啟挑戰：老派軟體工程師的測試修練」系列的 .NET 10 更新版。文章與範例專案全面升級到 .NET 10 與 xUnit v3（Microsoft Testing Platform 模式），每一篇的程式碼都對應一個可直接建置、執行的範例專案。
+
+目前發佈 Day 01～05，其餘各天陸續整理中。
+
+## 文章清單
+
+| 天數 | 文章 | 範例專案 |
+| ------ | ------ | ---------- |
+| Day 01 | [老派工程師的測試啟蒙 - 為什麼我們需要測試？](Day01.md) | [samples/day01](samples/day01) |
+| Day 02 | [xUnit 框架深度解析 - 從生態概觀到實戰專案](Day02.md) | [samples/day02](samples/day02) |
+| Day 03 | [xUnit 進階功能與測試資料管理](Day03.md) | [samples/day03](samples/day03) |
+| Day 04 | [AwesomeAssertions 基礎應用與實戰技巧](Day04.md) | [samples/day04](samples/day04) |
+| Day 05 | [AwesomeAssertions 進階技巧與複雜情境應用](Day05.md) | [samples/day05](samples/day05) |
+
+## 環境需求
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+- 任一開發工具：Visual Studio 2022 以上、JetBrains Rider、VS Code
+
+## 執行範例
+
+每天的範例都內含自己的 `Directory.Packages.props`（CPM）與 `global.json`，可以獨立建置，不相依 repo 其他部分：
+
+```bash
+cd samples/day01
+dotnet test --solution Day01.FirstPrinciples.sln
+```
+
+各天的執行方式與測試說明見該目錄的 README。
+
+## 測試框架說明
+
+範例使用 `xunit.v3.mtp-v2`（xUnit v3 的 Microsoft Testing Platform 模式），並採雙軌設定：
+
+- **命令列**：`dotnet test` 依 `global.json` 的設定走 MTP
+- **IDE 測試總管**：Visual Studio 與 Rider 靠 `Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 走 VSTest 探索
+
+這是 xUnit 官方建議的過渡期做法——IDE 對 MTP 的支援還在跟進中，兩套並存可以讓命令列與測試總管都正常運作。
+
+## 套件版本
+
+各天套件版本集中在該天的 `Directory.Packages.props` 管理，csproj 內不寫版本號。文章開頭的 front-matter 宣告該篇相依的套件與範例專案。

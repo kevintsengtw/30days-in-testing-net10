@@ -1,0 +1,13 @@
+# 建置產物
+bin/
+obj/
+TestResults/
+*.trx
+
+# IDE
+.vs/
+.idea/
+*.user
+
+# 系統
+.DS_Store
