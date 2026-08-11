@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <!--
+    本檔為 day06 範例「自帶」的中央套件版本管理(CPM)。
+    放在 day06 資料夾根,讓本天範例可獨立開啟/建置/複製,不依賴 repo 根的 Directory.Packages.props。
+    NuGet 規則:專案只套用「最接近」的 Directory.Packages.props(不會與上層合併),
+    因此這份會蓋過 repo 根那份,且必須列齊本天用到的所有套件。
+    版本來源:repo 根 Directory.Packages.props(主清單)。
+  -->
+  <ItemGroup Label="Assertions">
+    <PackageVersion Include="AwesomeAssertions"                Version="9.5.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Testing Frameworks">
+    <PackageVersion Include="xunit.v3.mtp-v2"                   Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio"         Version="3.1.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk"            Version="18.3.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.3.3" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.9.0" />
+  </ItemGroup>
+
+</Project>

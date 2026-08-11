@@ -13,7 +13,7 @@
 | Day 03 | [xUnit 進階功能與測試資料管理](Day03.md) | [samples/day03](samples/day03) |
 | Day 04 | [AwesomeAssertions 基礎應用與實戰技巧](Day04.md) | [samples/day04](samples/day04) |
 | Day 05 | [AwesomeAssertions 進階技巧與複雜情境應用](Day05.md) | [samples/day05](samples/day05) |
-| Day 06 | Code Coverage 程式碼涵蓋範圍實戰指南（整理中） | —（本篇無範例專案） |
+| Day 06 | [Code Coverage 程式碼涵蓋範圍實戰指南](Day06.md) | [samples/day06](samples/day06) |
 | Day 07 | [相依替代入門 - 使用 NSubstitute](Day07.md) | [samples/day07](samples/day07) |
 | Day 08 | [測試輸出與記錄 - xUnit ITestOutputHelper 與 ILogger](Day08.md) | [samples/day08](samples/day08) |
 | Day 09 | [測試私有與內部成員 - Private 與 Internal 的測試策略](Day09.md) | [samples/day09](samples/day09) |
