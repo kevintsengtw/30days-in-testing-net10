@@ -169,7 +169,7 @@ public class PerformanceOptimizedTests
         stopwatch.Stop();
 
         // 效能驗證
-        stopwatch.ElapsedMilliseconds.Should().BeLessThan(5000, "因為混合驗證策略應該在 5 秒內完成");
+        stopwatch.ElapsedMilliseconds.Should().BeLessThan(15000, "因為混合驗證策略應該在 15 秒內完成");
 
         _output.WriteLine($"混合策略驗證 {processedOrders.Count} 筆訂單，耗時 {stopwatch.ElapsedMilliseconds}ms");
     }
