@@ -2,7 +2,7 @@
 
 「重啟挑戰：老派軟體工程師的測試修練」系列的 .NET 10 更新版。文章與範例專案全面升級到 .NET 10 與 xUnit v3（Microsoft Testing Platform 模式），每一篇的程式碼都對應一個可直接建置、執行的範例專案。
 
-目前發佈 Day 01～05，其餘各天陸續整理中。
+目前發佈 Day 01～05、Day 07～11；Day 06 因畫面截圖需更新為 VS2026 另行整理中，其餘各天陸續整理中。
 
 ## 文章清單
 
@@ -13,6 +13,12 @@
 | Day 03 | [xUnit 進階功能與測試資料管理](Day03.md) | [samples/day03](samples/day03) |
 | Day 04 | [AwesomeAssertions 基礎應用與實戰技巧](Day04.md) | [samples/day04](samples/day04) |
 | Day 05 | [AwesomeAssertions 進階技巧與複雜情境應用](Day05.md) | [samples/day05](samples/day05) |
+| Day 06 | Code Coverage 程式碼涵蓋範圍實戰指南（整理中） | —（本篇無範例專案） |
+| Day 07 | [相依替代入門 - 使用 NSubstitute](Day07.md) | [samples/day07](samples/day07) |
+| Day 08 | [測試輸出與記錄 - xUnit ITestOutputHelper 與 ILogger](Day08.md) | [samples/day08](samples/day08) |
+| Day 09 | [測試私有與內部成員 - Private 與 Internal 的測試策略](Day09.md) | [samples/day09](samples/day09) |
+| Day 10 | [AutoFixture 基礎：自動產生測試資料](Day10.md) | [samples/day10](samples/day10) |
+| Day 11 | [AutoFixture 進階：自訂化測試資料產生策略](Day11.md) | [samples/day11](samples/day11) |
 
 ## 環境需求
 

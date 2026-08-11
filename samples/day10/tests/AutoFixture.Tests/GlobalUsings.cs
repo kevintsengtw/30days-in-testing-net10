@@ -1,0 +1,12 @@
+global using AutoFixture;
+global using AutoFixture.Xunit3;
+global using AutoFixture.Core.Models;
+global using AutoFixture.Core.Services;
+global using AutoFixture.Core.Dtos;
+global using AutoFixture.Core.Validators;
+global using AwesomeAssertions;
+global using System.ComponentModel.DataAnnotations;
+global using System.Net.Mail;
+global using System.Diagnostics;
+global using System.Text.Json;
+global using Xunit;

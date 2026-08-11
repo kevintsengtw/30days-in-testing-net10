@@ -1,0 +1,98 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Day11",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Test Day11",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "--verbosity",
+                "normal"
+            ],
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Test Day11 - DataAnnotations",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "--filter",
+                "FullyQualifiedName~DataAnnotationsTests",
+                "--verbosity",
+                "normal"
+            ],
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Test Day11 - PropertyRange",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "--filter",
+                "FullyQualifiedName~PropertyRangeTests",
+                "--verbosity",
+                "normal"
+            ],
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Test Day11 - WithBehavior",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "--filter",
+                "FullyQualifiedName~WithBehaviorTests",
+                "--verbosity",
+                "normal"
+            ],
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Test Day11 - DateTimeRange",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "--filter",
+                "FullyQualifiedName~DateTimeRangeTests",
+                "--verbosity",
+                "normal"
+            ],
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        }
+    ]
+}
