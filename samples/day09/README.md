@@ -43,7 +43,7 @@ Day09.PrivateInternalTesting/
 
 - .NET 10.0
 - xunit.v3.mtp-v2 3.2.2（Microsoft Testing Platform 模式）
-- NSubstitute 5.3.0
+- NSubstitute 6.2.0
 - AwesomeAssertions 9.5.0
 
 ## 核心概念展示

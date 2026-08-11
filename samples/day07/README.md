@@ -56,7 +56,7 @@ Day07.DependencyReplacement.sln
 
 - **.NET 10**：目標框架 `net10.0`
 - **xunit.v3.mtp-v2 3.2.2**：單元測試框架（Microsoft Testing Platform 模式）
-- **NSubstitute 5.3.0**：測試替身框架
+- **NSubstitute 6.2.0**：測試替身框架
 - **AwesomeAssertions 9.5.0**：斷言程式庫
 - **Microsoft.Extensions.Logging 10.0.10**：結構化記錄
 - **GlobalUsings.cs**：全域 using 語句管理

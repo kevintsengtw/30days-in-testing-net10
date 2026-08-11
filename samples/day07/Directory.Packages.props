@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Mocking">
-    <PackageVersion Include="NSubstitute"                      Version="5.3.0" />
+    <PackageVersion Include="NSubstitute"                      Version="6.2.0" />
   </ItemGroup>
 
   <ItemGroup Label="Logging &amp; DI">
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Data">
-    <PackageVersion Include="Microsoft.Data.SqlClient"         Version="6.1.6" />
+    <PackageVersion Include="Microsoft.Data.SqlClient"         Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup Label="Testing Frameworks">

@@ -65,7 +65,7 @@ Day08.TestingLoggingOutput/
 - `xunit.runner.visualstudio` 3.1.5（IDE 測試總管相容，雙軌設定）
 - `Microsoft.Testing.Extensions.TrxReport` 2.3.3
 - `AwesomeAssertions` 9.5.0
-- `NSubstitute` 5.3.0
+- `NSubstitute` 6.2.0
 - `Microsoft.Extensions.Logging` 10.0.10
 - `Microsoft.Extensions.DependencyInjection` 10.0.10
 
