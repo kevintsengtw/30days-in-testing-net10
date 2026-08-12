@@ -170,7 +170,7 @@ public abstract class TimeProvider
 }
 ```
 
-這樣的設計正是 FakeTimeProvider 能運作的原因：它只覆寫 `GetUtcNow()`、`LocalTimeZone` 等需要控制的成員，其餘行為沿用基底類別。
+這樣的設計正是 FakeTimeProvider 能運作的原因：它覆寫了全部 virtual 成員（`GetUtcNow()`、`LocalTimeZone`、`GetTimestamp()`、`TimestampFrequency`、`CreateTimer()`），把時間來源整個換成內部可控的時鐘；非虛擬的 `GetLocalNow()`、`GetElapsedTime()` 則沿用基底實作，自動反映覆寫後的結果。
 
 ### 系統預設實作
 
