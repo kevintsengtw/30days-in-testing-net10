@@ -23,6 +23,9 @@
 | Day 13 | [NSubstitute 與 AutoFixture 的整合應用](Day13.md) | [samples/day13](samples/day13) |
 | Day 14 | [Bogus 入門：與 AutoFixture 的差異比較](Day14.md) | [samples/day14](samples/day14) |
 | Day 15 | [AutoFixture 與 Bogus 的整合應用](Day15.md) | [samples/day15](samples/day15) |
+| Day 16 | [測試日期與時間：Microsoft.Bcl.TimeProvider 取代 DateTime](Day16.md) | [samples/day16](samples/day16) |
+| Day 17 | [檔案與 IO 測試：使用 System.IO.Abstractions 模擬檔案系統 - 打造可測試的檔案操作](Day17.md) | [samples/day17](samples/day17) |
+| Day 18 | [驗證測試：FluentValidation Test Extensions](Day18.md) | [samples/day18](samples/day18) |
 
 ## 環境需求
 
