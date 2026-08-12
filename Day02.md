@@ -166,9 +166,7 @@ public void Add_各種輸入組合_應回傳正確結果(int a, int b, int expec
 
 xUnit 在現代 .NET 開發中的支援度：
 
-- **.NET Core**：官方推薦的測試框架
-- **ASP.NET Core**：官方範本預設使用 xUnit
-- **Entity Framework Core**：官方測試都使用 xUnit
+- **.NET 平台團隊**：runtime、ASP.NET Core、EF Core 等官方 repo 自身的測試都使用 xUnit
 - **Visual Studio**：原生支援，測試探索和執行
 - **JetBrains Rider**：完整支援
 - **CI/CD 工具**：Azure DevOps、GitHub Actions 等都有良好支援

@@ -161,20 +161,11 @@ var vin = faker.Vehicle.Vin();
 var vehicleType = faker.Vehicle.Type();
 
 // 圖片資訊 (Image DataSet)
-var imageUrl = faker.Image.PicsumUrl();
-var abstractImage = faker.Image.Abstract();
-var animalImage = faker.Image.Animals();
-var businessImage = faker.Image.Business();
-var catImage = faker.Image.Cats();
-var cityImage = faker.Image.City();
-var foodImage = faker.Image.Food();
-var nightlifeImage = faker.Image.Nightlife();
-var fashionImage = faker.Image.Fashion();
-var peopleImage = faker.Image.People();
-var natureImage = faker.Image.Nature();
-var sportsImage = faker.Image.Sports();
-var technicsImage = faker.Image.Technics();
-var transportImage = faker.Image.Transport();
+// 註：舊版的分類圖片方法（Cats、Food、Sports 等）已隨 LoremPixel 服務停止而自 Bogus 移除
+var picsumUrl = faker.Image.PicsumUrl();                   // https://picsum.photos 圖片網址
+var placeholderUrl = faker.Image.PlaceholderUrl(200, 100); // 佔位圖網址
+var loremFlickrUrl = faker.Image.LoremFlickrUrl();         // LoremFlickr 圖片網址
+var dataUri = faker.Image.DataUri(64, 64);                 // data: URI 內嵌圖（SVG）
 
 // 文字內容 (Lorem DataSet)
 var word = faker.Lorem.Word();
