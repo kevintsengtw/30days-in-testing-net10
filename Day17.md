@@ -145,11 +145,11 @@ public interface IFileSystem
 {
     IFile File { get; }
     IDirectory Directory { get; }
-    IFileInfo FileInfo { get; }
-    IDirectoryInfo DirectoryInfo { get; }
+    IFileInfoFactory FileInfo { get; }
+    IDirectoryInfoFactory DirectoryInfo { get; }
     IPath Path { get; }
-    IDriveInfo DriveInfo { get; }
-    // ...（另有 FileStream、FileSystemWatcher、FileVersionInfo 等成員）
+    IDriveInfoFactory DriveInfo { get; }
+    // ...（另有 FileStream、FileSystemWatcher、FileVersionInfo 等工廠成員）
 }
 
 // 檔案操作介面
@@ -163,6 +163,8 @@ public interface IFile
     // ... 更多方法
 }
 ```
+
+留意 `FileInfo`、`DirectoryInfo`、`DriveInfo` 這三個屬性是**工廠介面**，要用 `.New(path)` 取得對應的 `IFileInfo` 等執行個體——這就是後面範例裡 `_fileSystem.FileInfo.New(filePath)` 寫法的由來。
 
 ---
 
