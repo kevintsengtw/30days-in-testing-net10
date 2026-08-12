@@ -1,0 +1,11 @@
+global using Xunit;
+global using AutoNSubstitute.Core.Services;
+global using AutoNSubstitute.Core.Repositories;
+global using AutoNSubstitute.Core.Entities;
+global using AutoNSubstitute.Core.Dto;
+global using AutoNSubstitute.Tests.AutoFixtureConfigurations;
+global using AutoNSubstitute.Tests.Attributes;
+global using AutoFixture;
+global using AutoFixture.Xunit3;
+global using NSubstitute;
+global using AwesomeAssertions;

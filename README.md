@@ -19,6 +19,10 @@
 | Day 09 | [測試私有與內部成員 - Private 與 Internal 的測試策略](Day09.md) | [samples/day09](samples/day09) |
 | Day 10 | [AutoFixture 基礎：自動產生測試資料](Day10.md) | [samples/day10](samples/day10) |
 | Day 11 | [AutoFixture 進階：自訂化測試資料產生策略](Day11.md) | [samples/day11](samples/day11) |
+| Day 12 | [結合 AutoData：xUnit 與 AutoFixture 的整合應用](Day12.md) | [samples/day12](samples/day12) |
+| Day 13 | [NSubstitute 與 AutoFixture 的整合應用](Day13.md) | [samples/day13](samples/day13) |
+| Day 14 | [Bogus 入門：與 AutoFixture 的差異比較](Day14.md) | [samples/day14](samples/day14) |
+| Day 15 | [AutoFixture 與 Bogus 的整合應用](Day15.md) | [samples/day15](samples/day15) |
 
 ## 環境需求
 
