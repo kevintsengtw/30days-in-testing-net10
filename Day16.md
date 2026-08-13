@@ -19,6 +19,23 @@ packages:
 
 # Day 16 - 測試日期與時間：Microsoft.Bcl.TimeProvider 取代 DateTime
 
+<!-- toc -->
+
+- [前言](#前言)
+- [時間測試的根本問題](#時間測試的根本問題)
+- [Microsoft.Bcl.TimeProvider 登場](#microsoftbcltimeprovider-登場)
+- [重構時間相依程式碼](#重構時間相依程式碼)
+- [FakeTimeProvider 與測試實戰](#faketimeprovider-與測試實戰)
+- [進階時間控制技術](#進階時間控制技術)
+- [實戰應用情境](#實戰應用情境)
+- [AutoFixture 與 TimeProvider 整合](#autofixture-與-timeprovider-整合)
+- [最佳實務與注意事項](#最佳實務與注意事項)
+- [效能考量與限制](#效能考量與限制)
+- [今日小結](#今日小結)
+- [延伸閱讀](#延伸閱讀)
+
+<!-- /toc -->
+
 ## 前言
 
 前面已經學過各種測試技術，從基礎單元測試到 AutoFixture、Bogus 等進階工具。今天要解決一個很實際的問題：**時間相依性的測試**。

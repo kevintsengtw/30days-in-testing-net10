@@ -16,6 +16,23 @@ packages:
 
 # Day 18 - 驗證測試：FluentValidation Test Extensions
 
+<!-- toc -->
+
+- [前言](#前言)
+- [資料驗證測試的根本挑戰](#資料驗證測試的根本挑戰)
+- [FluentValidation 與 Test Extensions 解決方案](#fluentvalidation-與-test-extensions-解決方案)
+- [重構驗證邏輯：從 DataAnnotation 到 FluentValidation](#重構驗證邏輯從-dataannotation-到-fluentvalidation)
+- [為什麼要對 Validator 類別做單元測試？](#為什麼要對-validator-類別做單元測試)
+- [FluentValidation Test Extensions 基本用法](#fluentvalidation-test-extensions-基本用法)
+- [進階驗證技術](#進階驗證技術)
+- [年齡與生日驗證](#年齡與生日驗證)
+- [進階驗證情境與 NSubstitute 整合](#進階驗證情境與-nsubstitute-整合)
+- [測試資料管理與最佳實務](#測試資料管理與最佳實務)
+- [測試實務要點](#測試實務要點)
+- [延伸閱讀](#延伸閱讀)
+
+<!-- /toc -->
+
 ## 前言
 
 前一篇處理檔案系統相依性，這一篇改測**資料驗證邏輯**。

@@ -13,6 +13,20 @@ packages:
 
 # Day 04 - AwesomeAssertions 基礎應用與實戰技巧
 
+<!-- toc -->
+
+- [前言：現代測試 Assertions 的核心價值](#前言現代測試-assertions-的核心價值)
+- [Fluent Assertions 商業授權變化分析](#fluent-assertions-商業授權變化分析)
+- [AwesomeAssertions 完整介紹](#awesomeassertions-完整介紹)
+- [基本 Assertions 語法與核心功能](#基本-assertions-語法與核心功能)
+- [專案實戰應用技巧](#專案實戰應用技巧)
+- [今日重點回顧](#今日重點回顧)
+- [明日預告](#明日預告)
+- [參考資源](#參考資源)
+- [老派工程師的本日反思](#老派工程師的本日反思)
+
+<!-- /toc -->
+
 ## 前言：現代測試 Assertions 的核心價值
 
 在過去幾年的測試開發經驗中，我一直是 Fluent Assertions 的忠實使用者。它的流暢語法、豐富的 Assertions 方法，以及優秀的錯誤訊息，讓測試程式碼變得更加易讀和維護。

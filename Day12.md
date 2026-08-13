@@ -15,6 +15,25 @@ packages:
 
 # Day 12 - 結合 AutoData：xUnit 與 AutoFixture 的整合應用
 
+<!-- toc -->
+
+- [前言](#前言)
+- [本日重點](#本日重點)
+- [AutoData 屬性家族概述](#autodata-屬性家族概述)
+- [AutoData：完全自動產生參數](#autodata完全自動產生參數)
+- [InlineAutoData：混合固定值與自動產生](#inlineautodata混合固定值與自動產生)
+- [MemberAutoData：結合外部資料來源](#memberautodata結合外部資料來源)
+- [外部測試資料整合](#外部測試資料整合)
+- [CompositeAutoData：多重資料來源整合](#compositeautodata多重資料來源整合)
+- [控制物件集合產生的數量](#控制物件集合產生的數量)
+- [資料來源設計模式](#資料來源設計模式)
+- [與 Awesome Assertions 協作](#與-awesome-assertions-協作)
+- [本日重點回顧](#本日重點回顧)
+- [今日小結](#今日小結)
+- [相關參考資料](#相關參考資料)
+
+<!-- /toc -->
+
 ## 前言
 
 前一天完成了 AutoFixture 資料產生策略的自訂。這一篇改用 AutoData 屬性家族整合 xUnit 與 AutoFixture，讓參數化測試自動取得資料。

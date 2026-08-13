@@ -14,6 +14,22 @@ packages:
 
 # Day 11 - AutoFixture 進階：自訂化測試資料產生策略
 
+<!-- toc -->
+
+- [本日重點](#本日重點)
+- [System.ComponentModel.DataAnnotations 整合應用](#systemcomponentmodeldataannotations-整合應用)
+- [限定屬性值的範圍](#限定屬性值的範圍)
+- [補充：AutoFixture 的 .With(...) 行為](#補充autofixture-的-with-行為)
+- [限定 DateTime 屬性值的範圍](#限定-datetime-屬性值的範圍)
+- [實作可以指定屬性的 RandomRangedDateTimeBuilder 類別](#實作可以指定屬性的-randomrangeddatetimebuilder-類別)
+- [實作可以指定屬性的 RandomRangedNumericSequenceBuilder](#實作可以指定屬性的-randomrangednumericsequencebuilder)
+- [將 RandomRangedNumericSequenceBuilder 修改為支援所有數值型別](#將-randomrangednumericsequencebuilder-修改為支援所有數值型別)
+- [今日重點回顧](#今日重點回顧)
+- [本日小結](#本日小結)
+- [使用的套件版本](#使用的套件版本)
+
+<!-- /toc -->
+
 前面的章節介紹了 AutoFixture 的基本用法。這一篇改為依業務規則自訂測試資料產生邏輯，讓隨機資料仍落在有效範圍內。
 
 ## 本日重點

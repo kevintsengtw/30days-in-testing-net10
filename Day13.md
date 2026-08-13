@@ -20,6 +20,20 @@ packages:
 
 # Day 13 - NSubstitute 與 AutoFixture 的整合應用
 
+<!-- toc -->
+
+- [前言](#前言)
+- [AutoFixture.AutoNSubstitute 套件介紹](#autofixtureautonsubstitute-套件介紹)
+- [AutoFixture.AutoData 的核心概念](#autofixtureautodata-的核心概念)
+- [實作範例：ShipperService 測試](#實作範例shipperservice-測試)
+- [測試實作範例](#測試實作範例)
+- [整合的優勢與實務考量](#整合的優勢與實務考量)
+- [實務導入建議](#實務導入建議)
+- [今日小結](#今日小結)
+- [相關參考資料](#相關參考資料)
+
+<!-- /toc -->
+
 ## 前言
 
 前面學會了 NSubstitute 的相依模擬和 AutoFixture 的資料產生。但實際開發時，當服務類別有多個相依性，手動建立每個 Mock 物件會讓測試程式碼變得冗長。AutoFixture.AutoData 提供了更簡潔的解決方案，可以自動處理相依性注入並產生測試資料。
