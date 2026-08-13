@@ -2,7 +2,14 @@
 
 「重啟挑戰：老派軟體工程師的測試修練」系列的 .NET 10 更新版。文章與範例專案全面升級到 .NET 10 與 xUnit v3（Microsoft Testing Platform 模式），每一篇的程式碼都對應一個可直接建置、執行的範例專案。
 
-目前發佈 Day 01～11，其餘各天陸續整理中。
+目前發佈 Day 01～18，其餘各天陸續整理中。
+
+## 原版系列（2025 iThome 鐵人賽）
+
+本系列改寫自 2025 iThome 鐵人賽「重啟挑戰：老派軟體工程師的測試修練」，原版以 .NET 9 撰寫：
+
+- 系列文章：[重啟挑戰：老派軟體工程師的測試修練](https://ithelp.ithome.com.tw/users/20066083/ironman/8276)
+- 原版範例程式：[kevintsengtw/30Days_in_Testing_Samples](https://github.com/kevintsengtw/30Days_in_Testing_Samples)
 
 ## 文章清單
 
