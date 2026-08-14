@@ -2,7 +2,7 @@
 
 「重啟挑戰：老派軟體工程師的測試修練」系列的 .NET 10 更新版。文章與範例專案全面升級到 .NET 10 與 xUnit v3（Microsoft Testing Platform 模式），每一篇的程式碼都對應一個可直接建置、執行的範例專案。
 
-目前發佈 Day 01～23，其餘各天陸續整理中。
+目前發佈 Day 01～26，其餘各天陸續整理中。
 
 ## 原版系列（2025 iThome 鐵人賽）
 
@@ -38,12 +38,15 @@
 | Day 21 | [Testcontainers 整合測試：MSSQL + EF Core 以及 Dapper 基礎應用](Day21.md) | [samples/day21](samples/day21) |
 | Day 22 | [Testcontainers 整合測試：MongoDB 及 Redis 基礎到進階](Day22.md) | [samples/day22](samples/day22) |
 | Day 23 | [整合測試實戰：WebApi 服務的整合測試](Day23.md) | [samples/day23](samples/day23) |
+| Day 24 | [.NET Aspire Testing 入門基礎介紹](Day24.md) | [samples/day24](samples/day24) |
+| Day 25 | [.NET Aspire 整合測試實戰：從 Testcontainers 到 .NET Aspire Testing](Day25.md) | [samples/day25](samples/day25) |
+| Day 26 | [從 xUnit v2 升級到 xUnit v3：.NET 10 與 Microsoft Testing Platform 遷移指南](Day26.md) | [samples/day26](samples/day26) |
 
 ## 環境需求
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - 任一開發工具：Visual Studio 2022 以上、JetBrains Rider、VS Code
-- Docker（Day 19～23 的 Testcontainers 整合測試範例需要）
+- Docker（Day 19～25 的整合測試範例需要：Testcontainers 與 .NET Aspire）
 
 ## 執行範例
 

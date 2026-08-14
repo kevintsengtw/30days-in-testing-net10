@@ -1,0 +1,43 @@
+<Project>
+
+  <!--
+    覆寫 coverlet.collector 的 ReferencedPathMaps。
+
+    原版 target 的 WriteLinesToFile 雖有 WriteOnlyWhenDifferent,但搭配 Encoding="Unicode"
+    時比較會失效(MSBuild 已知問題),導致 CoverletSourceRootsMapping_* 每次建置都被重寫,
+    IDE 檔案監看因此觸發專案系統反覆重新評估。
+
+    這裡以同名 target 覆寫(Directory.Build.targets 的 import 晚於 NuGet targets,後定義者勝),
+    補上 Inputs/Outputs 增量宣告:參照的組件沒有變新就整個跳過。
+    source root mapping 只在 deterministic source paths 的覆蓋率情境需要,本範例不受影響。
+
+    若未來 coverlet.collector 官方修正,刪除本檔即可。
+  -->
+
+  <Target Name="ReferencedPathMaps"
+          BeforeTargets="CoreCompile"
+          DependsOnTargets="ResolveProjectReferences"
+          Inputs="@(AnnotatedProjects->'%(FullPath)')"
+          Outputs="$([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))CoverletSourceRootsMapping_$(AssemblyName)">
+    <MSBuild Projects="@(AnnotatedProjects->'%(FullPath)')"
+             Targets="$(_CoverletSourceRootTargetName)"
+             Properties="TargetFramework=%(AnnotatedProjects.NearestTargetFramework)"
+             SkipNonexistentTargets="true">
+      <Output TaskParameter="TargetOutputs" ItemName="_LocalTopLevelSourceRoot" />
+    </MSBuild>
+    <ItemGroup>
+      <_byProject Include="@(_LocalTopLevelSourceRoot->'%(MSBuildSourceProjectFile)')" OriginalPath="%(Identity)" />
+      <_mapping Include="@(_byProject->'%(Identity)|%(OriginalPath)=%(MappedPath)')" />
+    </ItemGroup>
+    <PropertyGroup>
+      <_sourceRootMappingFilePath>$([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))CoverletSourceRootsMapping_$(AssemblyName)</_sourceRootMappingFilePath>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(_sourceRootMappingFilePath)" Lines="@(_mapping)"
+                      Overwrite="true" Encoding="Unicode"
+                      Condition="'@(_mapping)'!=''" />
+    <ItemGroup>
+      <FileWrites Include="$(_sourceRootMappingFilePath)" Condition="'@(_mapping)'!=''" />
+    </ItemGroup>
+  </Target>
+
+</Project>

@@ -1,0 +1,5 @@
+{
+  "diagnosticMessages": false,
+  "maxParallelThreads": 4,
+  "parallelAlgorithm": "conservative"
+}
