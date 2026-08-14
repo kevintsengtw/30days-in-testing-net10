@@ -33,6 +33,11 @@
 | Day 16 | [測試日期與時間：Microsoft.Bcl.TimeProvider 取代 DateTime](Day16.md) | [samples/day16](samples/day16) |
 | Day 17 | [檔案與 IO 測試：使用 System.IO.Abstractions 模擬檔案系統 - 打造可測試的檔案操作](Day17.md) | [samples/day17](samples/day17) |
 | Day 18 | [驗證測試：FluentValidation Test Extensions](Day18.md) | [samples/day18](samples/day18) |
+| Day 19 | [整合測試入門：基礎架構與應用情境](Day19.md) | [samples/day19](samples/day19) |
+| Day 20 | [Testcontainers 初探：使用 Docker 架設測試環境](Day20.md) | [samples/day20](samples/day20) |
+| Day 21 | [Testcontainers 整合測試：MSSQL + EF Core 以及 Dapper 基礎應用](Day21.md) | [samples/day21](samples/day21) |
+| Day 22 | [Testcontainers 整合測試：MongoDB 及 Redis 基礎到進階](Day22.md) | [samples/day22](samples/day22) |
+| Day 23 | [整合測試實戰：WebApi 服務的整合測試](Day23.md) | [samples/day23](samples/day23) |
 
 ## 環境需求
 

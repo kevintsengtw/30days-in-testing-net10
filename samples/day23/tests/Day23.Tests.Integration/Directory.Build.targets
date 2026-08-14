@@ -1,0 +1,47 @@
+<Project>
+
+  <!--
+    覆寫 Microsoft.AspNetCore.Mvc.Testing 的 _AddContentRootForProjectReferences。
+
+    原版 target 沒有 Inputs/Outputs 增量宣告,每次建置(含無動作增量建置)都會重寫
+    obj/MvcTestingAppManifest.json 與輸出目錄的複本,導致 VS2026/Rider 的檔案監看
+    觸發專案系統反覆重新評估:方案總管圖示閃爍、測試總管的探索永遠無法完成。
+
+    這裡拆成兩個 target:
+    - _GenerateMvcTestManifestIncremental:掛上 Inputs/Outputs,參照的組件沒有變新
+      就跳過重寫(MSBuild 標準增量建置)。
+    - _AddContentRootForProjectReferences(同名覆寫,靠 Directory.Build.targets 晚於
+      NuGet targets import 的順序勝出):只負責掛 ContentWithTargetPath 項目,
+      內容與原版相同。
+
+    若未來 Microsoft.AspNetCore.Mvc.Testing 官方修正增量問題,刪除本檔即可。
+  -->
+
+  <Target Name="_GenerateMvcTestManifestIncremental"
+          DependsOnTargets="_ResolveMvcTestProjectReferences"
+          Inputs="@(_ContentRootProjectReferences)"
+          Outputs="$(IntermediateOutputPath)MvcTestingAppManifest.json">
+    <ItemGroup Condition="'@(_ContentRootProjectReferences->Count())' != '0'">
+      <_ManifestProjects Include="%(_ContentRootProjectReferences.FusionName)">
+        <ContentRoot>$([System.IO.Path]::GetDirectoryName('%(_ContentRootProjectReferences.MSBuildSourceProjectFile)'))</ContentRoot>
+      </_ManifestProjects>
+    </ItemGroup>
+
+    <GenerateMvcTestManifestTask ManifestPath="$(IntermediateOutputPath)MvcTestingAppManifest.json"
+                                 Projects="@(_ManifestProjects)"
+                                 Condition="'@(_ContentRootProjectReferences->Count())' != '0'" />
+  </Target>
+
+  <Target Name="_AddContentRootForProjectReferences"
+          BeforeTargets="PrepareResources"
+          DependsOnTargets="_ResolveMvcTestProjectReferences;_GenerateMvcTestManifestIncremental">
+    <ItemGroup Condition="'@(_ContentRootProjectReferences->Count())' != '0'">
+      <ContentWithTargetPath Include="$(IntermediateOutputPath)MvcTestingAppManifest.json"
+                             TargetPath="MvcTestingAppManifest.json"
+                             CopyToOutputDirectory="PreserveNewest"
+                             CopyToPublishDirectory="Never" />
+      <FileWrites Include="$(IntermediateOutputPath)MvcTestingAppManifest.json" />
+    </ItemGroup>
+  </Target>
+
+</Project>

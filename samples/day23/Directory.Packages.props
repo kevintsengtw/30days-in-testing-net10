@@ -1,0 +1,38 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- 修補 Testcontainers 傳遞相依的 SSH.NET 高風險弱點（GHSA-q939-rpr3-3284） -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <!-- 啟用集中式遞移相依性釘選：讓 Directory.Packages.props 的版本可覆寫由相依鏈帶入的
+         遞移套件，用來把有已知弱點的 Microsoft.OpenApi 升級到已修補版本（見下方）。 -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
+    <PackageVersion Include="AwesomeAssertions.Web" Version="2.0.3" />
+    <PackageVersion Include="Dapper" Version="2.1.79" />
+    <PackageVersion Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageVersion Include="Flurl.Http" Version="4.0.2" />
+    <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
+    <!-- Microsoft.AspNetCore.OpenApi 10.0.5 會帶入有 NU1903 高嚴重性弱點的 Microsoft.OpenApi 2.0.0
+         (GHSA-v5pm-xwqc-g5wc)，2.x 修補版本為 2.7.5，透過遞移釘選升級。 -->
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" />
+    <PackageVersion Include="Microsoft.Bcl.TimeProvider" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.9.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.3.3" />
+    <PackageVersion Include="Npgsql" Version="10.0.3" />
+    <PackageVersion Include="Respawn" Version="7.0.0" />
+    <PackageVersion Include="StackExchange.Redis" Version="3.1.13" />
+    <PackageVersion Include="SSH.NET" Version="2026.0.0" />
+    <PackageVersion Include="Testcontainers" Version="4.13.0" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.13.0" />
+    <PackageVersion Include="Testcontainers.Redis" Version="4.13.0" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+  </ItemGroup>
+</Project>

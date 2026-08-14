@@ -1,0 +1,10 @@
+global using Xunit;
+global using AwesomeAssertions;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Logging;
+global using Testcontainers.MsSql;
+global using System.Data;
+global using Microsoft.Data.SqlClient;
+global using Dapper;
+global using DatabaseTesting.Core.Models;
+global using DatabaseTesting.Core.Data;

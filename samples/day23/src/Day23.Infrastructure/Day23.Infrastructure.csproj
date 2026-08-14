@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Day23.Domain\Day23.Domain.csproj"/>
+        <ProjectReference Include="..\Day23.Application\Day23.Application.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Dapper"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions"/>
+        <PackageReference Include="Npgsql"/>
+        <PackageReference Include="StackExchange.Redis"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+</Project>

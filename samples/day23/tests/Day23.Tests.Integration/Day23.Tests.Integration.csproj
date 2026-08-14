@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- 關閉 Microsoft.CodeCoverage 的 source root mapping:它每次建置都重寫檔案,會讓 IDE 專案系統反覆重新評估 -->
+        <DisableMsCoverageReferencedPathMaps>true</DisableMsCoverageReferencedPathMaps>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions"/>
+        <PackageReference Include="AwesomeAssertions.Web"/>
+        <!-- AwesomeAssertions.Web 透過 Microsoft.AspNet.WebApi.Client 帶入 System.Net.Http.Formatting，
+             其 PostAsJsonAsync/PutAsJsonAsync 擴充方法會與 BCL 的 System.Net.Http.Json 多載在補上
+             CancellationToken 後產生 CS0121 歧義；排除其編譯期資產（執行期保留），讓 BCL 多載成為唯一候選。 -->
+        <PackageReference Include="Microsoft.AspNet.WebApi.Client" ExcludeAssets="compile"/>
+        <PackageReference Include="Flurl.Http"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
+        <PackageReference Include="Microsoft.Bcl.TimeProvider"/>
+        <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing"/>
+        <PackageReference Include="Npgsql"/>
+        <PackageReference Include="Respawn"/>
+        <PackageReference Include="Testcontainers"/>
+        <PackageReference Include="Testcontainers.PostgreSql"/>
+        <PackageReference Include="Testcontainers.Redis"/>
+        <PackageReference Include="xunit.v3.mtp-v2"/>
+        <!-- IDE 測試總管相容:Rider 的 xUnit 探索需要 Microsoft.NET.Test.Sdk,VSTest 路徑另需 xunit.runner.visualstudio -->
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Day23.Api\Day23.Api.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- SQL Scripts -->
+        <Content Include="SqlScripts\Tables\CreateProductsTable.sql">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>

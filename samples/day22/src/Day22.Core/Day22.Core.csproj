@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MongoDB.Driver"/>
+        <PackageReference Include="StackExchange.Redis"/>
+        <!-- System.Text.Json 由 net10.0 共用框架提供，不需另外參考（NU1510）；
+             程式仍可正常 using System.Text.Json。 -->
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+        <PackageReference Include="Microsoft.Extensions.Options"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+        <PackageReference Include="Microsoft.Bcl.TimeProvider"/>
+    </ItemGroup>
+
+</Project>
