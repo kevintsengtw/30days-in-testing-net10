@@ -2,7 +2,7 @@
 
 「重啟挑戰：老派軟體工程師的測試修練」系列的 .NET 10 更新版。文章與範例專案全面升級到 .NET 10 與 xUnit v3（Microsoft Testing Platform 模式），每一篇的程式碼都對應一個可直接建置、執行的範例專案。
 
-目前發佈 Day 01～18，其餘各天陸續整理中。
+目前發佈 Day 01～23，其餘各天陸續整理中。
 
 ## 原版系列（2025 iThome 鐵人賽）
 
@@ -43,6 +43,7 @@
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - 任一開發工具：Visual Studio 2022 以上、JetBrains Rider、VS Code
+- Docker（Day 19～23 的 Testcontainers 整合測試範例需要）
 
 ## 執行範例
 
