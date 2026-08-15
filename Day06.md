@@ -164,6 +164,8 @@ dotnet test --coverage --coverage-output-format cobertura --coverage-output cove
 
 看過三種工具後，要特別留意一件事：這裡產出的 `coverage.cobertura.xml`，與前面 Visual Studio「`匯出結果`」預設存出的自家 XML **同為 XML 檔，內容格式卻不同**。Cobertura 是開放格式，根節點為 `<coverage>`，以 package → class → line 組織並帶分支統計；自家格式根節點為 `<results>`，以 module → function → range 逐行記錄、沒有分支資料。ReportGenerator 兩種都讀得懂，但只支援 Cobertura 的工具（例如部分 CI 涵蓋率服務）吃不下自家格式——交檔案給其他系統前，先確認拿到的是哪一種。
 
+跑完 `dotnet test --coverage` 只完成了資料收集，產出的 cobertura XML 還要轉成可讀的報告。後面的「產生完整的 HTML 涵蓋率報告（ReportGenerator）」小節會從執行測試開始，把整條流程走一遍。
+
 ---
 
 ## Fine Code Coverage 擴充套件
@@ -219,25 +221,45 @@ VS2026 的擴充相容模型可直接載入 VS2022 版擴充，FCC 實測可在 
 
 ### 產生完整的 HTML 涵蓋率報告（ReportGenerator）
 
-前述工具產出的 cobertura（例如官方 `Microsoft.Testing.Extensions.CodeCoverage` 擴充套件輸出的 `coverage.cobertura.xml`），可搭配 ReportGenerator 產生一份完整、可分享的 HTML 報告，內含 **Risk Hotspots（以 Cyclomatic Complexity、NPath Complexity、Crap Score 標示高風險方法）** 與分支涵蓋明細；若以 `-historydir` 累積多次執行結果，還能看到涵蓋率的歷史趨勢：
+前述工具產出的 cobertura（例如官方 `Microsoft.Testing.Extensions.CodeCoverage` 擴充套件輸出的 `coverage.cobertura.xml`），可搭配 ReportGenerator 產生一份完整、可分享的 HTML 報告，內含 **Risk Hotspots（以 Cyclomatic Complexity、NPath Complexity、Crap Score 標示高風險方法）** 與分支涵蓋明細；若以 `-historydir` 累積多次執行結果，還能看到涵蓋率的歷史趨勢。
 
-```bash
-# 安裝 ReportGenerator 全域工具
-dotnet tool install -g dotnet-reportgenerator-globaltool
+以範例專案 `samples/day06` 示範從執行測試到打開報告的完整流程。以下指令都在專案根目錄（`Day06.CodeCoverage.sln` 所在的目錄）執行：
 
-# 由 Cobertura XML 產生完整 HTML 報告
-# （在專案根目錄執行，即先前跑 dotnet test --coverage 的位置，
-#   涵蓋率資料在該目錄的 TestResults/ 之下，報告會產在同一層的 coveragereport/）
-reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html
-```
+1. 確認測試專案已加入涵蓋率擴充 `Microsoft.Testing.Extensions.CodeCoverage`（範例專案已加入；自己的專案還沒加的話，先執行）：
+
+    ```bash
+    dotnet add package Microsoft.Testing.Extensions.CodeCoverage
+    ```
+
+2. 執行測試並輸出 cobertura 格式的涵蓋率資料：
+
+    ```bash
+    dotnet test --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
+    ```
+
+    執行完成後，涵蓋率資料會在專案根目錄的 `TestResults/coverage.cobertura.xml`。
+
+3. 安裝 ReportGenerator 全域工具（只需要裝一次）：
+
+    ```bash
+    dotnet tool install -g dotnet-reportgenerator-globaltool
+    ```
+
+4. 由 cobertura XML 產生 HTML 報告，輸出到同一層的 `coveragereport/`：
+
+    ```bash
+    reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html
+    ```
+
+5. 開啟 `coveragereport/index.html` 檢視報告。
 
 `-reports` 的來源不限 MTP 輸出的 cobertura：前面 Visual Studio「`匯出結果`」存出的 XML 檔也能直接當來源，例如 `reportgenerator -reports:code_coverage_report.xml ...`（自家 XML 格式一樣讀得懂，但如前所述沒有分支資料，報告的 Branch coverage 會是 N/A）。
 
-在範例專案根目錄實際執行的過程——終端機輸出、產出的 `coveragereport/` 目錄與報告預覽：
+在範例專案根目錄實際執行步驟 2 與步驟 4 的過程——終端機輸出、產出的 `coveragereport/` 目錄與報告預覽：
 
 ![day06 reportgenerator execution](images/day06_reportgenerator_execution.png)
 
-產生後開啟 `coveragereport/index.html`，即可看到完整的涵蓋率報告與風險熱點分析。以範例專案的涵蓋率資料產出的報告如下——Line coverage 95%、Branch coverage 79%，逐類別列出涵蓋明細（報告只統計受測程式碼 `Day06.Domain`，測試專案不計入，所以數字與前面 VS 結果視窗的整體 93% 不同）；Risk Hotspots 顯示「No risk hotspots found」，因為範例專案的方法複雜度最高只有 5，沒有超過門檻的高風險方法：
+開啟 `coveragereport/index.html` 後的報告如下——Line coverage 95%、Branch coverage 79%，逐類別列出涵蓋明細（報告只統計受測程式碼 `Day06.Domain`，測試專案不計入，所以數字與前面 VS 結果視窗的整體 93% 不同）；Risk Hotspots 顯示「No risk hotspots found」，因為範例專案的方法複雜度最高只有 5，沒有超過門檻的高風險方法：
 
 ![day06 reportgenerator summary](images/day06_reportgenerator_summary.png)
 
@@ -253,18 +275,15 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport -re
 ```csharp
 public decimal CalculateTotal(decimal amount)
 {
-    var discount = 0m;
-
-    if (amount > 1000)
-    {
-        discount = 0.1m;
-    }
+    var discount = amount > 1000 ? 0.1m : 0m;
 
     return amount * (1 - discount);
 }
 ```
 
-只寫一個 `amount = 2000` 的測試：每一行都被執行過，line coverage 100%；但 `if` 的 false 分支（`amount <= 1000`、不打折的那條路）從來沒走過，branch coverage 只有 50%。萬一不打折的路徑有 bug，這樣的測試完全抓不到。
+只寫一個 `amount = 2000` 的測試：每一行都被執行過，line coverage 100%；但 `amount <= 1000`、不打折的那條路從來沒走過，branch coverage 只有 50%。萬一不打折的路徑有 bug，這樣的測試完全抓不到。
+
+這裡刻意用三元運算子。如果改寫成沒有 `else` 的 `if`，同一個測試量出來會不一樣——工具判定分支走沒走滿，看的是分支的目標位置有沒有被執行到，而 `if` 少了 `else` 的時候，「條件不成立」的目標剛好就是 `if` 區塊結束後的下一行；只要區塊跑過一次，兩個目標都算走到，branch 反而會顯示 100%。那種寫法只測 `amount = 2000` 得到的是 100%／100%，只測 `amount = 500` 才會看到 62.5%／50%（`Microsoft.Testing.Extensions.CodeCoverage` 與 coverlet 量到的數字一致）。
 
 範例專案報告的 95% 與 79% 落差就是這個現象：行大多有跑到，但部分條件只測了其中一邊。判讀報告時，branch coverage 是比較嚴格的指標；前面 Visual Studio 著色裡的「部分涵蓋」，通常就是分支沒走滿的位置。
 
