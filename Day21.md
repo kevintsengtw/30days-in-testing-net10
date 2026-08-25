@@ -129,14 +129,14 @@ MSSQL 在 .NET 專案中很常見。Testcontainers.MsSql 能啟動相同的資�
 
 **MSSQL + EF Core + Dapper 必要套件**：
 
-- **測試框架**：`xunit.v3.mtp-v2` (3.2.2)、`Microsoft.Testing.Extensions.TrxReport` (2.2.3)、`AwesomeAssertions` (9.4.0)
-- **EF Core**：`Microsoft.EntityFrameworkCore.SqlServer` (10.0.5)
-- **MSSQL 容器**：`Testcontainers.MsSql` (4.11.0)
-- **Dapper**：`Dapper` (2.1.72)
+- **測試框架**：`xunit.v3.mtp-v2` (3.2.2)、`Microsoft.Testing.Extensions.TrxReport` (2.3.3)、`AwesomeAssertions` (9.5.0)、`Microsoft.NET.Test.Sdk` (18.8.1)、`xunit.runner.visualstudio` (3.1.5)
+- **EF Core**：`Microsoft.EntityFrameworkCore.SqlServer` (10.0.10)
+- **MSSQL 容器**：`Testcontainers.MsSql` (4.13.0)
+- **Dapper**：`Dapper` (2.1.79)
 
-比起 xUnit v2，這裡拿掉了 `Microsoft.NET.Test.Sdk`、`xunit`、`xunit.runner.visualstudio`，改由 `xunit.v3.mtp-v2` 一次涵蓋。xUnit v3 走 Microsoft.Testing.Platform（MTP），測試專案本身是可執行檔，`.csproj` 要加 `<OutputType>Exe</OutputType>`；`PackageReference` 只列名稱、不寫版本，版本統一集中在 per-day `Directory.Packages.props`（CPM）。
+比起 xUnit v2，這裡拿掉了 `xunit`，改由 `xunit.v3.mtp-v2` 涵蓋。`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 則留著。IDE 的支援還在過渡期，Visual Studio 與 Rider 的**測試總管**探索測試仍走 VSTest 路徑，缺了這兩個套件就一個測試也顯示不出來。所以範例採雙軌設定：命令列的 `dotnet test` 依 `global.json` 走 MTP，IDE 測試總管靠這兩個套件走 VSTest 探索，兩邊互不干擾。 xUnit v3 走 Microsoft.Testing.Platform（MTP），測試專案本身是可執行檔，`.csproj` 要加 `<OutputType>Exe</OutputType>`；`PackageReference` 只列名稱、不寫版本，版本統一集中在 per-day `Directory.Packages.props`（CPM）。
 
-**關於 `Microsoft.Data.SqlClient`**：Dapper 使用 `SqlConnection` 連 MSSQL，因此會用到 `Microsoft.Data.SqlClient`，但**測試專案不需要顯式安裝**。它隨 `Microsoft.EntityFrameworkCore.SqlServer` 10.0.5 傳遞相依進來（實際解析版本為 6.1.5），在 `GlobalUsings.cs` 加上 `global using Microsoft.Data.SqlClient;` 即可使用。請選 `Microsoft.Data.SqlClient`，不要使用舊版的 `System.Data.SqlClient`。
+**關於 `Microsoft.Data.SqlClient`**：Dapper 使用 `SqlConnection` 連 MSSQL，因此會用到 `Microsoft.Data.SqlClient`，但**測試專案不需要顯式安裝**。它隨 `Microsoft.EntityFrameworkCore.SqlServer` 10.0.10 傳遞相依進來（實際解析版本為 6.1.1），在 `GlobalUsings.cs` 加上 `global using Microsoft.Data.SqlClient;` 即可使用。請選 `Microsoft.Data.SqlClient`，不要使用舊版的 `System.Data.SqlClient`。
 
 ### 測試資料準備
 

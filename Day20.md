@@ -447,11 +447,15 @@ dotnet sln add Day20.Core.Integration.Tests
     <PackageVersion Include="Testcontainers.Redis" Version="4.13.0" />
     <PackageVersion Include="WireMock.Net.Testcontainers" Version="2.14.0" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
   </ItemGroup>
 </Project>
 ```
 
-比起 xUnit v2，這裡拿掉了 `Microsoft.NET.Test.Sdk`、`xunit`、`xunit.runner.visualstudio`：它們的職責由 `xunit.v3.mtp-v2` 一次涵蓋。
+比起 xUnit v2，這裡拿掉了 `xunit`，它的職責由 `xunit.v3.mtp-v2` 涵蓋。
+
+`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 則留著。IDE 的支援還在過渡期，Visual Studio 與 Rider 的**測試總管**探索測試仍走 VSTest 路徑，缺了這兩個套件就一個測試也顯示不出來。所以範例採雙軌設定：命令列的 `dotnet test` 依 `global.json` 走 MTP，IDE 測試總管靠這兩個套件走 VSTest 探索，兩邊互不干擾。
 
 ### 常見問題處理
 

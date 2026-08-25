@@ -304,6 +304,9 @@ ASP.NET Core 提供了專門的測試套件 `Microsoft.AspNetCore.Mvc.Testing`�
 <PackageReference Include="AwesomeAssertions" />
 <PackageReference Include="AwesomeAssertions.Web" />
 <PackageReference Include="xunit.v3.mtp-v2" />
+<!-- IDE 測試總管相容：Rider 的 xUnit 探索需要 Microsoft.NET.Test.Sdk，VSTest 路徑另需 xunit.runner.visualstudio -->
+<PackageReference Include="Microsoft.NET.Test.Sdk" />
+<PackageReference Include="xunit.runner.visualstudio" />
 <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
 ```
 
@@ -327,7 +330,9 @@ xUnit v3 改走 Microsoft.Testing.Platform（MTP），測試專案本身是一�
 </PropertyGroup>
 ```
 
-比起 xUnit v2，這裡拿掉了 `xunit`、`xunit.runner.visualstudio`、`Microsoft.NET.Test.Sdk` 與 `System.Net.Http.Json`：前三個的職責由 `xunit.v3.mtp-v2` 一次涵蓋，`System.Net.Http.Json` 則已內建於 .NET 10 共享框架，不必再另外安裝。
+比起 xUnit v2，這裡拿掉了 `xunit` 與 `System.Net.Http.Json`：前者的職責由 `xunit.v3.mtp-v2` 涵蓋，後者已內建於 .NET 10 共享框架，不必再另外安裝。
+
+`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 則留著。IDE 的支援還在過渡期，Visual Studio 與 Rider 的**測試總管**探索測試仍走 VSTest 路徑，缺了這兩個套件就一個測試也顯示不出來。所以範例採雙軌設定：命令列的 `dotnet test` 依 `global.json` 走 MTP，IDE 測試總管靠這兩個套件走 VSTest 探索，兩邊互不干擾。
 
 **重要的套件說明**：
 

@@ -81,7 +81,7 @@ dotnet test Calculator.Tests.V2.csproj --no-build
 - dynamic skip、explicit test、`MatrixTheoryData`
 - assembly fixture、Console 與 Trace output capture
 
-`xunit.v3` 3.2.2 本身內含 MTP v1 runner；本範例改用 `xunit.v3.mtp-v2`，明確選擇 MTP v2。正式 v3 專案不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`。
+`xunit.v3` 3.2.2 本身內含 MTP v1 runner；本範例改用 `xunit.v3.mtp-v2`，明確選擇 MTP v2。MTP 本身不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`，本範例保留這兩個套件是為了讓 IDE 測試總管能探索到測試（IDE 目前仍走 VSTest 路徑）。
 
 ## 遷移檢查工具
 

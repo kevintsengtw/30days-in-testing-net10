@@ -66,7 +66,7 @@ NoSQL 資料庫測試是個實用技能。MongoDB 用來處理文件型資料和
 - **.NET 10 SDK**：使用最新的 .NET 版本，享受最佳的效能和功能支援
 - **Docker Desktop**：容器執行環境，建議版本 4.0 以上
 - **xUnit v3（xunit.v3.mtp-v2 3.2.2）**：走 Microsoft.Testing.Platform 的測試框架
-- **AwesomeAssertions 9.4.0**：提供多樣化的斷言語法
+- **AwesomeAssertions 9.5.0**：提供多樣化的斷言語法
 - **至少 8GB RAM**：確保容器和測試的順暢執行
 - **SSD 硬碟**：提升容器啟動和測試執行速度
 
@@ -124,20 +124,22 @@ NoSQL 資料庫測試是個實用技能。MongoDB 用來處理文件型資料和
     <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.3.3" />
     <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
     <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.9.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
   </ItemGroup>
 </Project>
 ```
 
 **套件版本選擇考量**：
 
-- **MongoDB.Driver 3.10.0**：其相依鏈改用已修補的 `SharpCompress`（≥ 0.48.1）與 `Snappier`（≥ 1.3.1），一併避免這兩個遞移套件的弱點警告
+- **MongoDB.Driver 3.11.0**：其相依鏈改用已修補的 `SharpCompress`（≥ 0.48.1）與 `Snappier`（≥ 1.3.1），一併避免這兩個遞移套件的弱點警告
 - **StackExchange.Redis 3.1.13**：穩定的 Redis 用戶端，支援 Redis 7.x 的所有功能
-- **Testcontainers 4.11.0**：本系列鎖定的版本（不代表你閱讀時的最新版），提供良好的容器管理
-- **AwesomeAssertions 9.4.0**：多樣化的斷言語法，提升測試可讀性
-- **Microsoft.Bcl.TimeProvider 10.0.5**：提供可測試的時間抽象，避免直接使用 DateTime.UtcNow
-- **Microsoft.Extensions.TimeProvider.Testing 10.4.0**：測試用的時間控制工具，實現確定性時間測試
+- **Testcontainers 4.13.0**：本系列鎖定的版本（不代表你閱讀時的最新版），提供良好的容器管理
+- **AwesomeAssertions 9.5.0**：多樣化的斷言語法，提升測試可讀性
+- **Microsoft.Bcl.TimeProvider 10.0.10**：提供可測試的時間抽象，避免直接使用 DateTime.UtcNow
+- **Microsoft.Extensions.TimeProvider.Testing 10.9.0**：測試用的時間控制工具，實現確定性時間測試
 
-比起 xUnit v2，這裡拿掉了 `Microsoft.NET.Test.Sdk`、`xunit`、`xunit.runner.visualstudio`，改由 `xunit.v3.mtp-v2` 一次涵蓋，並加上 `Microsoft.Testing.Extensions.TrxReport` 產生 TRX 報告。xUnit v3 走 Microsoft.Testing.Platform（MTP），測試專案本身是可執行檔，`.csproj` 要加 `<OutputType>Exe</OutputType>`，再用 `global.json` 指定 SDK 與 `"test": { "runner": "Microsoft.Testing.Platform" }`。
+比起 xUnit v2，這裡拿掉了 `xunit`，改由 `xunit.v3.mtp-v2` 涵蓋，並加上 `Microsoft.Testing.Extensions.TrxReport` 產生 TRX 報告。`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 則留著。IDE 的支援還在過渡期，Visual Studio 與 Rider 的**測試總管**探索測試仍走 VSTest 路徑，缺了這兩個套件就一個測試也顯示不出來。所以範例採雙軌設定：命令列的 `dotnet test` 依 `global.json` 走 MTP，IDE 測試總管靠這兩個套件走 VSTest 探索，兩邊互不干擾。xUnit v3 走 Microsoft.Testing.Platform（MTP），測試專案本身是可執行檔，`.csproj` 要加 `<OutputType>Exe</OutputType>`，再用 `global.json` 指定 SDK 與 `"test": { "runner": "Microsoft.Testing.Platform" }`。
 
 ## Collection Fixture 模式深度解析
 

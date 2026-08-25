@@ -217,7 +217,7 @@ v3 最終專案則是可執行的 test application：
 
 1. xUnit v3 test project 預設是 `Exe`，可以作為獨立 test application 執行。
 2. `xunit.v3.mtp-v2` 明確選擇 MTP v2；一般 `xunit.v3` 3.2.2 套件內建的是 MTP v1 runner。
-3. 原生 MTP 方案不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`。若團隊決定繼續使用 VSTest，套件組合會不同，不要把兩種設定混在一起。
+3. MTP 本身不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`。本範例仍保留這兩個套件，是為了讓 Visual Studio 與 Rider 的測試總管能探索到測試——IDE 目前仍走 VSTest 路徑。命令列由 `global.json` 指定走 MTP，兩邊互不干擾。若團隊決定完全改用 VSTest 執行，套件組合會不同，不要把兩種設定混在一起。
 
 ## Breaking change 1：不能再用 async void
 
