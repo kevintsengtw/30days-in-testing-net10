@@ -45,8 +45,11 @@ public class PerformanceTests
         users.Should().HaveCount(dataCount);
         cachedUsers.Should().HaveCount(dataCount);
 
-        // 快取版本通常會更快（在大量資料產生時）
-        cacheStopwatch.ElapsedMilliseconds.Should().BeLessThan(stopwatch.ElapsedMilliseconds);
+        // 快取的契約是「同型別只產生一次」：100 次取得的是同一個執行個體
+        cachedUsers.Should().AllSatisfy(u => u.Should().BeSameAs(cachedUsers[0]));
+
+        // 時間只做輸出觀察、不做斷言：這裡的工作量只有數毫秒，
+        // 整數毫秒的解析度與平行執行的排程雜訊，會讓「快取一定比較快」不成立
 
         // 調整效能期望值 - User 物件有複雜結構，每個可能需要 20-50ms
         // 100 個 User 物件應該在 10 秒內完成（考慮到循環參考的複雜度）
@@ -123,6 +126,11 @@ public class PerformanceTests
     {
         // Arrange
         var factory = new IntegratedTestDataFactory();
+
+        // 暖機：先產生並丟棄一筆，把 AutoFixture 建 specimen 圖與 JIT 這類
+        // 一次性成本排除在量測之外。否則 count 小的時候固定成本除不開，
+        // 平均值會被放大到超過門檻——這個測試比的是穩態的每筆成本
+        _ = factory.CreateMany<Product>(1);
 
         // Act
         var stopwatch = Stopwatch.StartNew();

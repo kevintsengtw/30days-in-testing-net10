@@ -175,6 +175,8 @@ dotnet test --filter-class "AutoFixtureBogusMix.Tests.PerformanceTests"
 - `User` 物件圖含循環參考（`User → Company → Employees` 又回到 `List<User>`），雖有 `OmitOnRecursionBehavior` 避免無限迴圈，每個 User 的產生成本仍約 10～50ms（依機器而定）
 - 因此複雜物件的大量產生測試把資料量從 1000 降到 100、門檻放寬到 10 秒；1000 筆的大量產生測試改用 `Address` 這類無關聯的簡單物件驗證
 - 如果要在自己的專案做類似測試，建議：複雜物件降低數量或改用專用的簡化工廠，大量資料場景用簡單物件衡量
+- **量測前先暖機**。`不同數量_資料產生效能比較` 用 `[InlineData(10)]`／`100`／`500` 比較每筆成本，但第一個跑到的案例要獨自吸收 AutoFixture 建 specimen 圖與 JIT 的一次性成本。`count` 是 10 時那筆固定成本除不開，平均值會從 0.1 ms 跳到 10 ms 以上而踩破門檻——`100` 與 `500` 攤得開就沒事。換句話說，紅不紅取決於執行順序。解法是計時前先產生並丟棄一筆
+- **不要對牆鐘時間做相對比較**。「快取版比較快」聽起來理所當然，寫成 `cacheStopwatch.ElapsedMilliseconds.Should().BeLessThan(stopwatch.ElapsedMilliseconds)` 卻是不可靠的斷言：這裡整批只花幾毫秒，整數毫秒的解析度根本分不出高下，平行執行時 GC 或執行緒被排開也會讓快取那段反而更久。實測過，這條斷言的失敗率大約一半。改成驗證快取真正保證的事——同一個型別只產生一次，`GetCached<T>()` 回的是同一個執行個體——時間則留在輸出裡供觀察
 
 ## 學習重點
 
