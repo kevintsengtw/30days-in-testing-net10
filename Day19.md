@@ -311,11 +311,11 @@ ASP.NET Core 提供了專門的測試套件 `Microsoft.AspNetCore.Mvc.Testing`�
 
 ```xml
 <!-- samples/day19/Directory.Packages.props -->
-<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.5" />
-<PackageVersion Include="AwesomeAssertions" Version="9.4.0" />
+<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.10" />
+<PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
 <PackageVersion Include="AwesomeAssertions.Web" Version="2.0.3" />
 <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
-<PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.2.3" />
+<PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.3.3" />
 ```
 
 xUnit v3 改走 Microsoft.Testing.Platform（MTP），測試專案本身是一個直接跑起來的可執行檔，所以 `.csproj` 要加上 `<OutputType>Exe</OutputType>`：
@@ -701,7 +701,7 @@ FluentAssertions.Web 實際上有三個不同的套件版本，需要根據你�
 
 ```xml
 <!-- 如果專案檔案中有這個 -->
-<PackageReference Include="AwesomeAssertions" Version="9.4.0" />
+<PackageReference Include="AwesomeAssertions" Version="9.5.0" />
 ```
 
 2. **移除錯誤的套件引用**：
