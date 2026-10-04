@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
+<Project Sdk="Aspire.AppHost.Sdk/13.5.3">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
@@ -6,6 +6,13 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <UserSecretsId>aspire-day25-apphost</UserSecretsId>
+        <!--
+          Aspire 13.5.0 起，AspireUseCliBundle 預設 false 會發出 ASPIRE010，提醒部分功能需要
+          Aspire CLI bundle。本範例刻意不依賴 Aspire CLI（README 已載明 CLI 非執行測試的必要
+          條件），設為 true 反而會因缺少 CLI 而建置失敗（ASPIRE009），等於替讀者多加前置需求。
+          因此抑制此提示；代價是不再被提醒未啟用 CLI bundle。
+        -->
+        <NoWarn>$(NoWarn);ASPIRE010</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

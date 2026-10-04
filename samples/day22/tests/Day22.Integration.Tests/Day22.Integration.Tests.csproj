@@ -13,9 +13,6 @@
 
     <ItemGroup>
         <PackageReference Include="xunit.v3.mtp-v2"/>
-        <!-- IDE 測試總管相容:Rider 的 xUnit 探索需要 Microsoft.NET.Test.Sdk,VSTest 路徑另需 xunit.runner.visualstudio -->
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="xunit.runner.visualstudio" />
         <PackageReference Include="Microsoft.Testing.Extensions.TrxReport"/>
         <PackageReference Include="AwesomeAssertions"/>
         <PackageReference Include="Testcontainers"/>

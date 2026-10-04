@@ -35,17 +35,17 @@ Day21.DatabaseTesting/
 
 ### 核心專案 (DatabaseTesting.Core)
 - .NET 10 (net10.0)
-- Microsoft.EntityFrameworkCore.SqlServer: 10.0.5
-- Microsoft.EntityFrameworkCore.Design: 10.0.5
-- Dapper: 2.1.72
+- Microsoft.EntityFrameworkCore.SqlServer: 10.0.12
+- Microsoft.EntityFrameworkCore.Design: 10.0.12
+- Dapper: 2.1.79
 
 ### 測試專案 (DatabaseTesting.Tests)
-- xunit.v3.mtp-v2: 3.2.2（xUnit v3，走 Microsoft.Testing.Platform）
-- Microsoft.Testing.Extensions.TrxReport: 2.2.3
-- AwesomeAssertions: 9.4.0
-- Testcontainers.MsSql: 4.11.0
+- xunit.v3.mtp-v2: 4.0.0（xUnit v3，走 Microsoft.Testing.Platform）
+- Microsoft.Testing.Extensions.TrxReport: 2.4.0
+- AwesomeAssertions: 9.6.0
+- Testcontainers.MsSql: 4.15.0
 
-> 版本統一集中在 per-day 的 `Directory.Packages.props`（CPM）；測試專案 `.csproj` 需加 `<OutputType>Exe</OutputType>`。`Microsoft.EntityFrameworkCore.SqlServer` 10.0.5 與 `Dapper` 2.1.72 由測試專案引用；`Microsoft.Data.SqlClient` 6.1.5 隨 EF Core SqlServer 傳遞相依、不需顯式安裝。
+> 版本統一集中在 per-day 的 `Directory.Packages.props`（CPM）；測試專案 `.csproj` 需加 `<OutputType>Exe</OutputType>`。`Microsoft.EntityFrameworkCore.SqlServer` 10.0.12 與 `Dapper` 2.1.79 由測試專案引用；`Microsoft.Data.SqlClient` 6.1.6 隨 EF Core SqlServer 傳遞相依、不需顯式安裝。
 
 ## 執行方式
 
@@ -151,3 +151,24 @@ dotnet test --solution Day21.DatabaseTesting.sln --filter-class "DatabaseTesting
 5. 資料庫操作的完整驗證方法
 
 這個範例專案為資料庫測試提供了堅實的基礎，可以作為實際專案中資料存取層測試的參考模板。
+
+## 附錄：Windows 上的 SQL Server 容器連線逾時
+
+這個問題只出現在部分 Windows 環境。如果每個測試都卡在 SQL Server 登入前交握，先檢查防毒軟體、EDR、VPN、廣告攔截器或其他網路防護工具。錯誤訊息通常長這樣：
+
+```text
+Microsoft.Data.SqlClient.SqlException : 已超過連接逾時的設定。
+在嘗試使用登入前的信號交換確認時超過逾時等待的時間。
+```
+
+本機確認的成因是 AdGuard v8 使用 WFP 驅動，並開啟 `Filter localhost`。TCP 連線可以建立，但 `127.0.0.1` 的 TDS PRELOGIN 回應只剩前 9／26 bytes。關閉 `Settings → App settings → Advanced settings → Filter localhost` 後，AdGuard 服務仍維持執行，主機端與 Docker SQL Server 各跑三次都收到完整 26 bytes。
+
+如果無法調整網路防護，可以在使用者家目錄建立 `.testcontainers.properties`，暫時讓 Testcontainers 改用 `localhost`：
+
+```ini
+host.override=localhost
+```
+
+Windows 的路徑是 `C:\Users\<你的帳號>\.testcontainers.properties`。這是替代路徑，不是根本修正；環境恢復後應移除設定再測一次。
+
+其他產品可找 localhost、loopback、network inspection 或 web protection 相關選項。參考與追蹤：[AdGuard 進階設定說明](https://adguard.com/kb/adguard-for-windows/settings/app-settings/advanced-settings/)、[AdGuard for Windows #6242](https://github.com/AdguardTeam/AdguardForWindows/issues/6242)、[Docker Desktop #622](https://github.com/docker/desktop-feedback/issues/622)。

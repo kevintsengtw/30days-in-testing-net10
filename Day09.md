@@ -7,8 +7,6 @@ packages:
   - AwesomeAssertions
   - NSubstitute
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
 ---
 

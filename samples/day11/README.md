@@ -34,8 +34,8 @@ Day11.AutoFixtureAdvanced.sln
 
 - **.NET 10**
 - **AutoFixture 4.18.1**
-- **AwesomeAssertions 9.5.0**
-- **xunit.v3.mtp-v2 3.2.2**（Microsoft.Testing.Platform）
+- **AwesomeAssertions 9.6.0**
+- **xunit.v3.mtp-v2 4.0.0**（Microsoft.Testing.Platform）
 
 ## 主要功能展示
 

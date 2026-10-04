@@ -19,7 +19,7 @@ MyProject.sln
 ### 前置需求
 
 - .NET 10 SDK
-- Visual Studio 2022 或 VS Code
+- Visual Studio 2026、JetBrains Rider 或 VS Code
 
 ### 執行測試
 
@@ -43,7 +43,7 @@ dotnet test --solution MyProject.sln --report-trx --report-trx-filename day02.tr
 ## 技術規格
 
 - **.NET**: 10.0
-- **測試框架**: xunit.v3.mtp-v2 3.2.2（Microsoft Testing Platform 模式）
+- **測試框架**: xunit.v3.mtp-v2 4.0.0（Microsoft Testing Platform 模式）
 - **測試數量**: 32 個（5 個 Fact、5 個 Theory 展開 27 組資料，全數通過）
 
 ## 測試內容說明

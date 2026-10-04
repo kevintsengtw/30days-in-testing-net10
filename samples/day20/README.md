@@ -35,20 +35,20 @@ Day20/
 
 - **.NET 10**: 目標框架 net10.0
 - **Entity Framework Core 10.0.5**: ORM 框架，支援 PostgreSQL 和 SQL Server
-- **StackExchange.Redis 2.12.1**: Redis 用戶端
-- **Npgsql.EntityFrameworkCore.PostgreSQL 10.0.1**: PostgreSQL 連接器
+- **StackExchange.Redis 3.1.31**: Redis 用戶端
+- **Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3**: PostgreSQL 連接器
 
-### Testcontainers 4.11.0
+### Testcontainers 4.15.0
 
-- **Testcontainers.PostgreSql 4.11.0**: PostgreSQL 容器支援
-- **Testcontainers.MsSql 4.11.0**: SQL Server 容器支援
-- **Testcontainers.Redis 4.11.0**: Redis 容器支援
-- **WireMock.Net.Testcontainers 2.0.0**: WireMock 容器支援
+- **Testcontainers.PostgreSql 4.15.0**: PostgreSQL 容器支援
+- **Testcontainers.MsSql 4.15.0**: SQL Server 容器支援
+- **Testcontainers.Redis 4.15.0**: Redis 容器支援
+- **WireMock.Net.Testcontainers 2.15.0**: WireMock 容器支援
 
 ### 測試框架
 
-- **xunit.v3.mtp-v2 3.2.2**: 測試框架（xUnit v3，走 Microsoft.Testing.Platform）
-- **AwesomeAssertions 9.4.0**: 流暢的斷言庫
+- **xunit.v3.mtp-v2 4.0.0**: 測試框架（xUnit v3，走 Microsoft.Testing.Platform）
+- **AwesomeAssertions 9.6.0**: 流暢的斷言庫
 
 ## 測試涵蓋
 
@@ -245,6 +245,27 @@ public async Task ValidateEmailAsync_使用有效電子郵件_應回傳True()
 - 豐富的測試輔助工具
 - 清晰的錯誤訊息和斷言
 - 易於擴展的架構設計
+
+## 附錄：Windows 上的 SQL Server 容器連線逾時
+
+如果只有 SQL Server 測試在登入前交握階段逾時，PostgreSQL、Redis 與 WireMock 都正常，先檢查防毒軟體、EDR、VPN、廣告攔截器或其他網路防護工具。錯誤訊息通常長這樣：
+
+```text
+Microsoft.Data.SqlClient.SqlException : 已超過連接逾時的設定。
+在嘗試使用登入前的信號交換確認時超過逾時等待的時間。
+```
+
+本機確認的成因是 AdGuard v8 使用 WFP 驅動，並開啟 `Filter localhost`。TCP 連線可以建立，但 `127.0.0.1` 的 TDS PRELOGIN 回應只剩前 9／26 bytes。關閉 `Settings → App settings → Advanced settings → Filter localhost` 後，AdGuard 服務仍維持執行，主機端與 Docker SQL Server 各跑三次都收到完整 26 bytes。
+
+如果無法調整網路防護，可以在使用者家目錄建立 `.testcontainers.properties`，暫時讓 Testcontainers 改用 `localhost`：
+
+```ini
+host.override=localhost
+```
+
+Windows 的路徑是 `C:\Users\<你的帳號>\.testcontainers.properties`。這是替代路徑，不是根本修正；環境恢復後應移除設定再測一次。
+
+其他產品可找 localhost、loopback、network inspection 或 web protection 相關選項。參考與追蹤：[AdGuard 進階設定說明](https://adguard.com/kb/adguard-for-windows/settings/app-settings/advanced-settings/)、[AdGuard for Windows #6242](https://github.com/AdguardTeam/AdguardForWindows/issues/6242)、[Docker Desktop #622](https://github.com/docker/desktop-feedback/issues/622)。
 
 ## 注意事項
 

@@ -15,8 +15,6 @@ packages:
   - Microsoft.Testing.Extensions.TrxReport
   - NSubstitute
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 19 - 整合測試入門：基礎架構與應用情境
@@ -304,9 +302,6 @@ ASP.NET Core 提供了專門的測試套件 `Microsoft.AspNetCore.Mvc.Testing`�
 <PackageReference Include="AwesomeAssertions" />
 <PackageReference Include="AwesomeAssertions.Web" />
 <PackageReference Include="xunit.v3.mtp-v2" />
-<!-- IDE 測試總管相容：Rider 的 xUnit 探索需要 Microsoft.NET.Test.Sdk，VSTest 路徑另需 xunit.runner.visualstudio -->
-<PackageReference Include="Microsoft.NET.Test.Sdk" />
-<PackageReference Include="xunit.runner.visualstudio" />
 <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
 ```
 
@@ -314,11 +309,11 @@ ASP.NET Core 提供了專門的測試套件 `Microsoft.AspNetCore.Mvc.Testing`�
 
 ```xml
 <!-- samples/day19/Directory.Packages.props -->
-<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.10" />
-<PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
+<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.12" />
+<PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
 <PackageVersion Include="AwesomeAssertions.Web" Version="2.0.3" />
-<PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
-<PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.3.3" />
+<PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.0" />
+<PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.4.0" />
 ```
 
 xUnit v3 改走 Microsoft.Testing.Platform（MTP），測試專案本身是一個直接跑起來的可執行檔，所以 `.csproj` 要加上 `<OutputType>Exe</OutputType>`：
@@ -332,7 +327,7 @@ xUnit v3 改走 Microsoft.Testing.Platform（MTP），測試專案本身是一�
 
 比起 xUnit v2，這裡拿掉了 `xunit` 與 `System.Net.Http.Json`：前者的職責由 `xunit.v3.mtp-v2` 涵蓋，後者已內建於 .NET 10 共享框架，不必再另外安裝。
 
-`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 則留著。IDE 的支援還在過渡期，Visual Studio 與 Rider 的**測試總管**探索測試仍走 VSTest 路徑，缺了這兩個套件就一個測試也顯示不出來。所以範例採雙軌設定：命令列的 `dotnet test` 依 `global.json` 走 MTP，IDE 測試總管靠這兩個套件走 VSTest 探索，兩邊互不干擾。
+`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 也一起拿掉了。這兩個屬於 VSTest 那一套：早年 IDE 測試總管只認 VSTest，純 MTP 專案不補上它們就一個測試也列不出來。現在 Visual Studio 2026 與 Rider 都探索得到 MTP 專案，留著只是多兩個用不到的相依。命令列這邊由 `global.json` 的 `"test": { "runner": "Microsoft.Testing.Platform" }` 決定走 MTP。
 
 **重要的套件說明**：
 
@@ -706,7 +701,7 @@ FluentAssertions.Web 實際上有三個不同的套件版本，需要根據你�
 
 ```xml
 <!-- 如果專案檔案中有這個 -->
-<PackageReference Include="AwesomeAssertions" Version="9.5.0" />
+<PackageReference Include="AwesomeAssertions" Version="9.6.0" />
 ```
 
 2. **移除錯誤的套件引用**：

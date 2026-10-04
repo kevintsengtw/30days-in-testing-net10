@@ -1,6 +1,6 @@
 # Day26：從 xUnit v2 升級到 xUnit v3
 
-這個範例以 .NET 10 展示 xUnit v2 → v3 的遷移。`Calculator.Tests.V2` 是升級前對照；`Calculator.Tests.V3` 是採用 xUnit v3 3.2.2 與 Microsoft Testing Platform v2 的完成版本。
+這個範例以 .NET 10 展示 xUnit v2 → v3 的遷移。`Calculator.Tests.V2` 是升級前對照；`Calculator.Tests.V3` 是採用 xUnit v3 4.0.0 與 Microsoft Testing Platform v2 的完成版本。
 
 ## 專案結構
 
@@ -30,12 +30,12 @@ samples/day26/
 | --- | --- |
 | Target framework | `net10.0` |
 | xUnit v2 對照 | 2.9.3 |
-| xUnit v3 | 3.2.2 |
+| xUnit v3 | 4.0.0 |
 | Microsoft Testing Platform | v2（由 `xunit.v3.mtp-v2` 提供） |
-| Microsoft.Testing.Extensions.TrxReport | 2.3.2 |
-| AwesomeAssertions | 9.5.0 |
-| Microsoft.NET.Test.Sdk（僅 v2） | 18.8.1 |
-| xunit.runner.visualstudio（僅 v2） | 3.1.5 |
+| Microsoft.Testing.Extensions.TrxReport | 2.4.0 |
+| AwesomeAssertions | 9.6.0 |
+| Microsoft.NET.Test.Sdk（僅 v2） | 18.9.0 |
+| xunit.runner.visualstudio（僅 v2） | 4.0.0 |
 | coverlet.collector（僅 v2） | 10.0.1 |
 
 ## 執行正式 v3 方案
@@ -81,7 +81,7 @@ dotnet test Calculator.Tests.V2.csproj --no-build
 - dynamic skip、explicit test、`MatrixTheoryData`
 - assembly fixture、Console 與 Trace output capture
 
-`xunit.v3` 3.2.2 本身內含 MTP v1 runner；本範例改用 `xunit.v3.mtp-v2`，明確選擇 MTP v2。MTP 本身不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`，本範例保留這兩個套件是為了讓 IDE 測試總管能探索到測試（IDE 目前仍走 VSTest 路徑）。
+`xunit.v3` 這個 metapackage 自己不含實作，相依哪一個 MTP 版本會隨版本改變（3.2.2 相依 `xunit.v3.mtp-v1`，4.0.0 起改為 `xunit.v3.mtp-v2`）；本範例直接寫 `xunit.v3.mtp-v2`，把 MTP 主版本釘住。MTP 不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`，v3 專案沒有帶；這兩個只留在走 VSTest 的 v2 對照專案裡。
 
 ## 遷移檢查工具
 

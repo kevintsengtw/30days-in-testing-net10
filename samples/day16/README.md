@@ -35,16 +35,16 @@ Day16.TimeTesting/
 
 ### 主要專案 (Day16.TimeTesting.Core)
 
-- **Microsoft.Bcl.TimeProvider** 10.0.10 - 時間抽象層的核心套件（.NET 8+ 已內建 TimeProvider，此套件為舊框架的 polyfill）
+- **Microsoft.Bcl.TimeProvider** 10.0.12 - 時間抽象層的核心套件（.NET 8+ 已內建 TimeProvider，此套件為舊框架的 polyfill）
 
 ### 測試專案 (Day16.TimeTesting.Tests)
 
 - **Microsoft.Extensions.TimeProvider.Testing** 10.9.0 - FakeTimeProvider 測試工具
-- **AwesomeAssertions** 9.5.0 - 斷言庫
+- **AwesomeAssertions** 9.6.0 - 斷言庫
 - **AutoFixture** 4.18.1 / **AutoFixture.Xunit3** 4.19.0 / **AutoFixture.AutoNSubstitute** 4.18.1 - 自動化測試資料產生
 - **NSubstitute** 6.2.0 - 模擬框架（全系列版本對齊）
-- **xunit.v3.mtp-v2** 3.2.2 - 測試框架（Microsoft.Testing.Platform 模式）
-- **Microsoft.Testing.Extensions.TrxReport** 2.3.3 - TRX 測試報告
+- **xunit.v3.mtp-v2** 4.0.0 - 測試框架（Microsoft.Testing.Platform 模式）
+- **Microsoft.Testing.Extensions.TrxReport** 2.4.0 - TRX 測試報告
 
 > **關於 NU1608 警告**：NSubstitute 與全系列對齊升至 6.x，AutoFixture.AutoNSubstitute 4.18.1 宣告的相依上限是 NSubstitute < 6.0.0，因此 restore／build 會出現 NU1608 警告。這是預期行為，功能不受影響（70/70 測試通過），詳細說明見 Day13 文章「關於 NU1608 警告」一節。
 

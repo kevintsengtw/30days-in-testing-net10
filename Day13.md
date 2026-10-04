@@ -14,8 +14,6 @@ packages:
   - NSubstitute
   - Throw
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 13 - NSubstitute 與 AutoFixture 的整合應用

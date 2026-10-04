@@ -48,7 +48,7 @@
 
 其中影響最大的是 xUnit 從 v2 換到 v3，而且換掉的不只是套件名稱而已。xUnit v3 是建構在 Microsoft Testing Platform（MTP）之上的，跟 v2 所使用的 VSTest 是兩套不同的執行平台，所以測試專案本身要改成可執行檔，連帶著 runner 的套件組合、CI 的執行指令也都要跟著改。周邊的工具鏈也是一樣，像是 VSTest 時代用來收集涵蓋率的 coverlet.collector，在 MTP 上就已經不適用，要改用官方的涵蓋率擴充套件。生態系當然也是跟著走，AutoFixture 出了對應的 AutoFixture.Xunit3，而且是在改用之後才發現，v2 版的 MemberAutoData 有個長期存在的 bug，不管資料來源有幾列，實際上都只會執行第一列。
 
-至於為什麼是現在換，除了 xUnit v3 最低支援的是 .NET 8、官方的穩定產品版已經來到 3.2.2 之外，還有一個更現實的理由：xunit v2 的套件在 NuGet 上已經被標記為 deprecated，訊息寫的是「This package has been deprecated as it is legacy and is no longer maintained.」，並且直接指向 xunit.v3 要大家改用。官方的說明是 v2 已經進入維護模式，之後只會為了安全性問題發布修正，所有的新功能都只會在 v3 這條線上。
+至於為什麼是現在換，除了 xUnit v3 最低支援的是 .NET 8、官方的穩定產品版已經來到 4.0.0 之外，還有一個更現實的理由：xunit v2 的套件在 NuGet 上已經被標記為 deprecated，訊息寫的是「This package has been deprecated as it is legacy and is no longer maintained.」，並且直接指向 xunit.v3 要大家改用。官方的說明是 v2 已經進入維護模式，之後只會為了安全性問題發布修正，所有的新功能都只會在 v3 這條線上。
 
 這件事在企業裡的影響其實比想像中大。很多公司會使用像 Mend 這類的套件相依掃描工具去掃描專案，只要掃出有被標示為過期或是不再維護的套件，就會被要求在上版前先處理掉，嚴格一點的甚至會直接把建置或是發佈的流程給擋下來。xUnit 官方的 GitHub 上就有 issue 在反映這個情況，因為不管官方的說明寫得再怎麼委婉，多數的組織看到 deprecated 就是直接當成「不可使用」來處理。既然目標框架都要升到 .NET 10 了，那就沒有理由再繼續留在 v2。
 

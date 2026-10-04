@@ -9,11 +9,8 @@ packages:
   - AwesomeAssertions
   - Microsoft.EntityFrameworkCore
   - Microsoft.EntityFrameworkCore.SqlServer
-  - Microsoft.Data.SqlClient
   - Microsoft.Testing.Extensions.TrxReport
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 24 - .NET Aspire Testing 入門基礎介紹
@@ -41,6 +38,7 @@ packages:
 - [Portability 驗證](#portability-驗證)
 - [Aspire 13.4 的行為變更](#aspire-134-的行為變更)
 - [常見問題](#常見問題)
+- [附錄：Windows 上的 SQL Server 登入前交握逾時](#附錄windows-上的-sql-server-登入前交握逾時)
 - [小結](#小結)
 - [參考資料](#參考資料)
 
@@ -55,10 +53,10 @@ packages:
 本篇範例已更新為以下版本：
 
 - .NET 10
-- Aspire 13.4.6
-- xUnit v3 3.2.2
+- Aspire 13.5.3
+- xUnit v3 4.0.0
 - Microsoft Testing Platform（MTP）
-- Entity Framework Core 10.0.10
+- Entity Framework Core 10.0.12
 - SQL Server container
 
 Day19～23 的遷移經驗會用在專案設定與驗證流程，但 Day24 保留自己的主題與測試範圍，不會把前一天的 Web API 範例搬進來。
@@ -169,31 +167,29 @@ day24/
   </PropertyGroup>
 
   <ItemGroup Label="Aspire">
-    <PackageVersion Include="Aspire.Hosting.SqlServer" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.4.6" />
+    <PackageVersion Include="Aspire.Hosting.SqlServer" Version="13.5.3" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.5.3" />
   </ItemGroup>
 
   <ItemGroup Label="Assertions">
-    <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
+    <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
   </ItemGroup>
 
   <ItemGroup Label="EntityFrameworkCore">
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
-  </ItemGroup>
-
-  <ItemGroup Label="Data Provider">
-    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
   </ItemGroup>
 
   <ItemGroup Label="Testing Frameworks">
-    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.3.3" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.4.0" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.0" />
   </ItemGroup>
 </Project>
 ```
 
-Aspire 套件要使用同一個 patch 版本，EF Core 套件也應對齊。這次另外釘選 `Microsoft.Data.SqlClient` 7.0.2，原因不是看到 transitive dependency 有新版本就全部強制更新，而是 EF Core 10.0.10 原本帶入的 SqlClient 6.1.1 仍包含已淘汰的身分驗證相依鏈。更新後重新跑完整測試與 package audit，才確認這個釘選可以保留。
+Aspire 套件要使用同一個 patch 版本，EF Core 套件也應對齊。
+
+這份 CPM 裡沒有 `Microsoft.Data.SqlClient`。遷移當時曾把它釘在 7.0.2，因為 EF Core 10.0.10 帶入的 SqlClient 6.1.1 還拖著已淘汰的身分驗證相依鏈。升到 EF Core 10.0.12 之後，下限變成 6.1.6。拿掉釘選重跑 `--deprecated --include-transitive`，三個專案都是 0，44 個測試也照過，釘選就移除了。現在 `BookStore.Core` 解析到 6.1.6；測試專案同時參考 AppHost，用的是 `Aspire.Hosting.SqlServer` 帶入的 7.0.1。
 
 ## Aspire 13 AppHost 專案格式
 
@@ -209,11 +205,12 @@ Aspire 9 的 AppHost 常見寫法是：
 Aspire 13 已簡化 AppHost SDK。更新後的 `BookStore.AppHost.csproj` 如下：
 
 ```xml
-<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
+<Project Sdk="Aspire.AppHost.Sdk/13.5.3">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);ASPIRE010</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -227,6 +224,8 @@ Aspire 13 已簡化 AppHost SDK。更新後的 `BookStore.AppHost.csproj` 如下
 1. SDK 版本直接寫在 `<Project Sdk="...">`
 2. 不再需要獨立的 `<Sdk Name="..." />`
 3. 不再直接引用 `Aspire.Hosting.AppHost`，因為 Aspire 13 SDK 已自動提供
+
+`NoWarn` 那一行是 Aspire 13.5 之後才需要的。13.5.0 起，AppHost 沒有啟用 Aspire CLI bundle 就會發出 `ASPIRE010`。照提示把 `AspireUseCliBundle` 設成 `true` 也不行：沒裝 Aspire CLI 的機器會改以 `ASPIRE009` 建置失敗。這個範例不要求安裝 Aspire CLI，所以抑制這則提示。
 
 原本 AppHost 還參考了 `BookStore.Core`，但 AppHost 並沒有把它當作可執行 project resource。這會產生 `ASPIRE004`，所以本次移除那個未使用的 project reference。測試專案仍會直接參考 Core 與 AppHost。
 
@@ -265,7 +264,7 @@ Day24 使用 .NET 10 原生 MTP 模式。`global.json` 放在 solution 同一層
 }
 ```
 
-`latestFeature` 會在相同 major/minor（10.0）中，選擇不低於 10.0.300 的最高已安裝 feature band 與 patch；本次環境選到 10.0.302。
+`latestFeature` 會在相同 major/minor（10.0）中，選擇不低於 10.0.300 的最高已安裝 feature band 與 patch；遷移當時的環境選到 10.0.302。
 
 測試專案的重點設定如下：
 
@@ -642,6 +641,8 @@ dotnet test --solution Day24.AspireTesting.sln `
 
 build 結果是 0 warnings、0 errors。測試數量維持 44，沒有為了讓數字好看而刪除失敗案例。
 
+上表是遷移當時在 Aspire 13.4.6、xUnit v3 3.2.2 量到的數字。2026-10-04 升到 Aspire 13.5.3 與 xUnit v3 4.0.0 後，在 Windows 重跑兩次都是 44／44，耗時 31.3 秒與 27.1 秒，build 仍是 0 warnings、0 errors。
+
 ## NuGet 套件稽核
 
 更新套件後要檢查的不只是「能不能 restore」。本次執行：
@@ -652,13 +653,15 @@ dotnet list Day24.AspireTesting.sln package --deprecated --include-transitive
 dotnet list Day24.AspireTesting.sln package --vulnerable --include-transitive
 ```
 
-2026-07-21 的結果：
+2026-10-04 的結果：
 
-- 直接相依 outdated：0
 - deprecated（包含 transitive）：0
 - vulnerable（包含 transitive）：0
+- 直接相依 outdated：4 個套件。Aspire 兩個套件有 13.6.0，`xunit.v3.mtp-v2` 有 4.0.1，`Microsoft.Testing.Extensions.TrxReport` 有 2.4.1
 
-舊版 Aspire dependency graph 帶入 MessagePack 2.5.192，NuGet 會回報多個中度與高度弱點。升級到 Aspire 13.4.6 後不再出現這些 vulnerable package 警告。
+outdated 不是 0，這是刻意的。Day24 的版本跟 Day25 和系列其他天數對齊，沒有單獨追到最新。要升就整個系列一起升、一起重跑測試。
+
+舊版 Aspire dependency graph 帶入 MessagePack 2.5.192，NuGet 會回報多個中度與高度弱點。升級到 Aspire 13 之後不再出現這些 vulnerable package 警告。
 
 ## Portability 驗證
 
@@ -703,11 +706,41 @@ docker version
 
 交易測試使用 non-retry DbContext。若正式程式需要 retry，使用 EF Core execution strategy 執行整個 transaction block，不要只在測試裡關掉錯誤。
 
+## 附錄：Windows 上的 SQL Server 登入前交握逾時
+
+這不是 Aspire Testing 的必要設定，也不會發生在每一台 Windows。如果 44 個測試全部停在 SQL Server 登入前交握，而容器本身顯示 Running，先檢查主機上的防毒軟體、EDR、VPN、廣告攔截器或其他網路防護工具。
+
+```text
+Microsoft.Data.SqlClient.SqlException : 已超過連接逾時的設定。
+在嘗試使用登入前的信號交換確認時超過逾時等待的時間。
+```
+
+這類軟體可能會檢查 IPv4 loopback 流量。TCP 連線仍可建立，所以單純測試連接埠會得到「可連線」；SQL Server 的 TDS PRELOGIN 回應若被截斷，`sql_check` 還是會一直等到逾時。
+
+本機確認的案例是 AdGuard v8。使用 WFP 驅動並開啟 `Filter localhost` 時，不論流量是否經過 Docker，`127.0.0.1` 都只收到 TDS 回應的前 9／26 bytes；主機端與 Docker 各測三次，結果一致。停止 AdGuard 服務後，兩組測試都恢復為 26／26。服務重新啟動並恢復過濾後，主機端又回到 9／26。
+
+不必關掉整套防護。在 AdGuard 開啟 `Settings → App settings → Advanced settings`，關閉 `Filter localhost` 即可。AdGuard 服務與其他防護仍維持執行，只有 loopback 流量不再交給它檢查。
+
+調整後的驗證結果：
+
+| 測試 | 結果 |
+| --- | --- |
+| 主機端 `127.0.0.1` 模擬服務 | 完整 26 bytes，3／3 |
+| Docker SQL Server `127.0.0.1` | 完整 26 bytes，3／3，1～3 ms |
+| Docker SQL Server `localhost`／`::1` | 各 3／3 完整 |
+| 本篇 Aspire Testing 範例 | 44／44 通過，34.9 秒 |
+
+其他產品的設定名稱可能不同。遇到相同症狀時，可以找 localhost、loopback、network inspection 或 web protection 相關選項，先停用範圍最小的本機流量檢查，再重跑測試。若公司政策不允許變更，請交由管理防毒或網路防護軟體的人員建立 loopback 排除規則。
+
+Testcontainers 可以用 `host.override=localhost` 暫時改走另一條 loopback 路徑，但 Aspire 的 SQL Server 連線字串使用 `127.0.0.1`，這個設定對 Aspire 無效。不要為了避開主機網路檢查而改寫 Aspire 的健康檢查或等待流程；那會讓範例偏離正式環境的行為。
+
+參考與追蹤：[AdGuard 進階設定說明](https://adguard.com/kb/adguard-for-windows/settings/app-settings/advanced-settings/)、[AdGuard for Windows #6242](https://github.com/AdguardTeam/AdguardForWindows/issues/6242)、[Docker Desktop #622](https://github.com/docker/desktop-feedback/issues/622)、[Aspire #19803](https://github.com/microsoft/aspire/issues/19803)。
+
 ## 小結
 
 Aspire Testing 讓測試與應用程式共用同一份 AppHost 拓撲，省下的是重複維護資源定義的成本。resource readiness、timeout、schema 初始化、資料隔離與 async disposal 仍要明確設計。
 
-Day24 的完成狀態是：Aspire 13.4.6、xUnit v3 + MTP、44 個測試連續通過、package audit 無 outdated／deprecated／vulnerable，並通過 repo 外 portability。下一篇會把相同方法用到 PostgreSQL、Redis 與 Web API 的多服務整合測試。
+Day24 的完成狀態是：Aspire 13.5.3、xUnit v3 4.0.0 + MTP、44 個測試連續通過、package audit 無 deprecated／vulnerable，並通過 repo 外 portability。下一篇會把相同方法用到 PostgreSQL、Redis 與 Web API 的多服務整合測試。
 
 ## 參考資料
 

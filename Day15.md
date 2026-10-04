@@ -10,8 +10,6 @@ packages:
   - Bogus
   - Microsoft.Testing.Extensions.TrxReport
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 15 - AutoFixture 與 Bogus 的整合應用
@@ -50,8 +48,8 @@ packages:
 <PackageReference Include="AutoFixture" Version="4.18.1" />
 <PackageReference Include="Bogus" Version="35.6.5" />
 <PackageReference Include="AutoFixture.Xunit3" Version="4.19.0" />
-<PackageReference Include="AwesomeAssertions" Version="9.5.0" />
-<PackageReference Include="xunit.v3.mtp-v2" Version="3.2.2" />
+<PackageReference Include="AwesomeAssertions" Version="9.6.0" />
+<PackageReference Include="xunit.v3.mtp-v2" Version="4.0.0" />
 ```
 
 並加入這些 using 語句：

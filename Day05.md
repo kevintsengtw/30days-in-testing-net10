@@ -6,8 +6,6 @@ target_framework: net10.0
 packages:
   - AwesomeAssertions
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
 ---
 
@@ -44,7 +42,7 @@ Day 04 介紹了 AwesomeAssertions 的基礎用法。今天接著處理複雜物
 
 **關於 AwesomeAssertions**：
 
-AwesomeAssertions 是 FluentAssertions 的社群分支版本，使用 Apache 2.0 授權。本章節使用 **AwesomeAssertions 9.5.0** 版本，該版本的 API 與 FluentAssertions 相容度很高，但有以下主要差異：
+AwesomeAssertions 是 FluentAssertions 的社群分支版本，使用 Apache 2.0 授權。本章節使用 **AwesomeAssertions 9.6.0** 版本，該版本的 API 與 FluentAssertions 相容度很高，但有以下主要差異：
 
 - **命名空間**：從 `FluentAssertions` 改為 `AwesomeAssertions`
 - **API 命名**：`EquivalencyAssertionOptions` 改為 `EquivalencyOptions`

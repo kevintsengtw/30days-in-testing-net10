@@ -45,7 +45,7 @@ packages:
 本篇用同一個 Calculator 範例保留兩個狀態：
 
 - `Calculator.Tests.V2`：升級前對照，使用 .NET 10 + xUnit 2.9.3 + VSTest。
-- `Calculator.Tests.V3`：完成狀態，使用 .NET 10 + xUnit 3.2.2 + MTP v2。
+- `Calculator.Tests.V3`：完成狀態，使用 .NET 10 + xUnit 4.0.0 + MTP v2。
 
 原始範例是 .NET 9；lab 建立時曾先把 TFM 機械式改成 `net10.0`，但那不代表 xUnit v3 遷移已完成。這次才正式處理套件、runner、專案輸出型態、breaking changes 與文件驗證。
 
@@ -61,21 +61,21 @@ packages:
 
 ## 先確認版本與支援範圍
 
-本篇在 2026-07-22 查得並實際使用的穩定版本如下：
+本篇在 2026-09-09 查得並實際使用的穩定版本如下：
 
 | 項目 | 版本 |
 | --- | --- |
 | .NET target framework | `net10.0` |
 | xUnit v2 對照 | 2.9.3 |
-| xUnit v3 | 3.2.2 |
-| `xunit.v3.mtp-v2` | 3.2.2 |
-| `Microsoft.Testing.Extensions.TrxReport` | 2.3.2 |
-| `AwesomeAssertions` | 9.5.0 |
-| `Microsoft.NET.Test.Sdk`（僅 v2） | 18.8.1 |
-| `xunit.runner.visualstudio`（僅 v2） | 3.1.5 |
+| xUnit v3 | 4.0.0 |
+| `xunit.v3.mtp-v2` | 4.0.0 |
+| `Microsoft.Testing.Extensions.TrxReport` | 2.4.0 |
+| `AwesomeAssertions` | 9.6.0 |
+| `Microsoft.NET.Test.Sdk`（僅 v2 對照） | 18.9.0 |
+| `xunit.runner.visualstudio`（僅 v2 對照） | 4.0.0 |
 | `coverlet.collector`（僅 v2） | 10.0.1 |
 
-xUnit NuGet 頁面當時雖已出現 v4 prerelease，但最新穩定產品版仍是 3.2.2，所以範例不採 preview。
+xUnit v3 的 4.0.0 已在 2026-08-14 發布正式版，本篇改用這一版。這一版把 MTP v1 的支援拿掉了，預設就是 MTP v2；`xunit.v3` 這個 metapackage 的相依也從 `xunit.v3.mtp-v1` 換成了 `xunit.v3.mtp-v2`。
 
 xUnit v3 最低支援 .NET 8 或 .NET Framework 4.7.2。若專案仍使用更早的 target framework，需要先處理框架升級，不能只替換 xUnit package。
 
@@ -159,19 +159,19 @@ Day26 有自己的 `Directory.Packages.props`，不依賴 repo 根目錄可能�
   </PropertyGroup>
 
   <ItemGroup Label="Assertions">
-    <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
+    <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
   </ItemGroup>
 
   <ItemGroup Label="xUnit v2 baseline">
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup Label="xUnit v3">
-    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.3.3" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.4.0" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.0" />
   </ItemGroup>
 </Project>
 ```
@@ -216,8 +216,8 @@ v3 最終專案則是可執行的 test application：
 這裡有三個重點：
 
 1. xUnit v3 test project 預設是 `Exe`，可以作為獨立 test application 執行。
-2. `xunit.v3.mtp-v2` 明確選擇 MTP v2；一般 `xunit.v3` 3.2.2 套件內建的是 MTP v1 runner。
-3. MTP 本身不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`。本範例仍保留這兩個套件，是為了讓 Visual Studio 與 Rider 的測試總管能探索到測試——IDE 目前仍走 VSTest 路徑。命令列由 `global.json` 指定走 MTP，兩邊互不干擾。若團隊決定完全改用 VSTest 執行，套件組合會不同，不要把兩種設定混在一起。
+2. `xunit.v3.mtp-v2` 把 MTP 的主版本明確釘住。`xunit.v3` 這個 metapackage 自己不含實作，它相依哪一個 MTP 版本是會變的——3.2.2 時相依 `xunit.v3.mtp-v1`，4.0.0 起改成 `xunit.v3.mtp-v2`。直接寫 `xunit.v3.mtp-v2` 就不會隨官方預設漂移。
+3. MTP 不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`，v3 專案因此一個也沒帶。這兩個只出現在 v2 對照專案裡，那邊本來就走 VSTest。早年 IDE 測試總管只認 VSTest，v3 專案得補上它們才列得出測試；現在 Visual Studio 2026 與 Rider 都探索得到 MTP 專案，不必再補。命令列由 `global.json` 指定走 MTP。兩種執行路徑的套件組合不同，不要混在一起。
 
 ## Breaking change 1：不能再用 async void
 
@@ -436,12 +436,12 @@ v3 正式 solution 的三項實測結果都是 0：沒有可更新的直接套�
 
 xUnit v2 → v3 會同時改到 target framework、可執行 test project、runner 與套件組合，也牽涉非同步測試簽名、fixture lifecycle 和 CI 命令。只換成 `xunit.v3` 套件並不完整。
 
-Day26 的最終方案使用 .NET 10、xUnit 3.2.2 與 MTP v2；v2 對照被隔離在自己的 VSTest 執行範圍。如此既能看見升級前後差異，也能確保正式 solution 是可重現、可建置且不混用 runner 的狀態。
+Day26 的最終方案使用 .NET 10、xUnit 4.0.0 與 MTP v2；v2 對照被隔離在自己的 VSTest 執行範圍。如此既能看見升級前後差異，也能確保正式 solution 是可重現、可建置且不混用 runner 的狀態。
 
 ## 參考資料
 
 - [xUnit v2 → v3 migration guide](https://xunit.net/docs/getting-started/v3/migration)
 - [xUnit v3 and Microsoft Testing Platform](https://xunit.net/docs/getting-started/v3/microsoft-testing-platform)
 - [What is new in xUnit v3](https://xunit.net/docs/getting-started/v3/whats-new)
-- [xUnit v3 3.2.2 release notes](https://xunit.net/releases/v3/3.2.2)
+- [xUnit v3 4.0.0 release notes](https://xunit.net/releases/v3/4.0.0)
 - [.NET dotnet test command](https://learn.microsoft.com/dotnet/core/tools/dotnet-test)

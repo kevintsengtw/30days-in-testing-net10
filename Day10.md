@@ -8,8 +8,6 @@ packages:
   - AutoFixture.Xunit3
   - AwesomeAssertions
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
 ---
 
@@ -2325,8 +2323,8 @@ AutoFixture 以「匿名測試」降低資料準備的篇幅，測試因而能�
 
 - **AutoFixture**: 4.18.1
 - **AutoFixture.Xunit3**: 4.19.0
-- **AwesomeAssertions**: 9.5.0
-- **xunit.v3.mtp-v2**: 3.2.2
+- **AwesomeAssertions**: 9.6.0
+- **xunit.v3.mtp-v2**: 4.0.0
 - **.NET**: 10.0
 
 範例程式碼：

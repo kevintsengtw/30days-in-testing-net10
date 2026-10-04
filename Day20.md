@@ -17,8 +17,6 @@ packages:
   - Testcontainers.Redis
   - WireMock.Net.Testcontainers
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 20 - Testcontainers 初探：使用 Docker 架設測試環境
@@ -34,6 +32,7 @@ packages:
 - [外部服務模擬測試](#外部服務模擬測試)
 - [總結](#總結)
 - [在本機執行測試（MTP）](#在本機執行測試mtp)
+- [附錄：Windows 上的 SQL Server 連線逾時](#附錄windows-上的-sql-server-連線逾時)
 - [參考資料](#參考資料)
 
 <!-- /toc -->
@@ -220,19 +219,19 @@ Mock 測試速度快但只測試邏輯，Testcontainers 測試較慢但能測試
 
 ```xml
 <!-- 基礎 Testcontainers 功能 -->
-<PackageReference Include="Testcontainers" Version="4.13.0" />
+<PackageReference Include="Testcontainers" Version="4.15.0" />
 ```
 
 #### 專用模組套件
 
 ```xml
 <!-- 資料庫 -->
-<PackageReference Include="Testcontainers.PostgreSql" Version="4.13.0" />
-<PackageReference Include="Testcontainers.MsSql" Version="4.13.0" />
+<PackageReference Include="Testcontainers.PostgreSql" Version="4.15.0" />
+<PackageReference Include="Testcontainers.MsSql" Version="4.15.0" />
 <PackageReference Include="Testcontainers.MongoDb" Version="4.13.0" />
 
 <!-- 快取與訊息佇列 -->
-<PackageReference Include="Testcontainers.Redis" Version="4.13.0" />
+<PackageReference Include="Testcontainers.Redis" Version="4.15.0" />
 <PackageReference Include="Testcontainers.RabbitMq" Version="4.13.0" />
 ```
 
@@ -435,27 +434,25 @@ dotnet sln add Day20.Core.Integration.Tests
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.3.3" />
+    <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.4.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
-    <PackageVersion Include="StackExchange.Redis" Version="3.1.13" />
-    <PackageVersion Include="Testcontainers" Version="4.13.0" />
-    <PackageVersion Include="Testcontainers.MsSql" Version="4.13.0" />
-    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.13.0" />
-    <PackageVersion Include="Testcontainers.Redis" Version="4.13.0" />
-    <PackageVersion Include="WireMock.Net.Testcontainers" Version="2.14.0" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+    <PackageVersion Include="StackExchange.Redis" Version="3.1.31" />
+    <PackageVersion Include="Testcontainers" Version="4.15.0" />
+    <PackageVersion Include="Testcontainers.MsSql" Version="4.15.0" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.15.0" />
+    <PackageVersion Include="Testcontainers.Redis" Version="4.15.0" />
+    <PackageVersion Include="WireMock.Net.Testcontainers" Version="2.15.0" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.0" />
   </ItemGroup>
 </Project>
 ```
 
 比起 xUnit v2，這裡拿掉了 `xunit`，它的職責由 `xunit.v3.mtp-v2` 涵蓋。
 
-`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 則留著。IDE 的支援還在過渡期，Visual Studio 與 Rider 的**測試總管**探索測試仍走 VSTest 路徑，缺了這兩個套件就一個測試也顯示不出來。所以範例採雙軌設定：命令列的 `dotnet test` 依 `global.json` 走 MTP，IDE 測試總管靠這兩個套件走 VSTest 探索，兩邊互不干擾。
+`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 也一起拿掉了。這兩個屬於 VSTest 那一套：早年 IDE 測試總管只認 VSTest，純 MTP 專案不補上它們就一個測試也列不出來。現在 Visual Studio 2026 與 Rider 都探索得到 MTP 專案，留著只是多兩個用不到的相依。命令列這邊由 `global.json` 的 `"test": { "runner": "Microsoft.Testing.Platform" }` 決定走 MTP。
 
 ### 常見問題處理
 
@@ -1912,6 +1909,29 @@ xUnit v3 走 Microsoft Testing Platform（MTP），runner 由本日 sample 的 `
 Set-Location samples/day20
 dotnet test --solution Day20.Samples.sln -c Release
 ```
+
+## 附錄：Windows 上的 SQL Server 連線逾時
+
+這個狀況不會發生在每一台 Windows。如果只有 SQL Server 測試在登入前交握階段逾時，PostgreSQL、Redis 與 WireMock 都正常，先檢查主機上的防毒軟體、EDR、VPN、廣告攔截器或其他網路防護工具。這些工具可能會檢查 IPv4 loopback 流量，讓 `127.0.0.1` 的 TCP 連線成功，卻截斷 SQL Server 的 TDS PRELOGIN 回應。
+
+```text
+Microsoft.Data.SqlClient.SqlException : 已超過連接逾時的設定。
+在嘗試使用登入前的信號交換確認時超過逾時等待的時間。
+```
+
+本機確認過一個具體案例：AdGuard v8 使用 WFP 驅動，並開啟 `Filter localhost` 時，`127.0.0.1` 只收到 TDS 回應的前 9／26 bytes；只關閉這個選項，AdGuard 服務與其他防護仍維持執行，主機端與 Docker SQL Server 各跑三次都收到完整 26 bytes。
+
+AdGuard 的設定位置是 `Settings → App settings → Advanced settings → Filter localhost`。開發環境需要連本機容器時，可以關閉這個選項。其他防護軟體的名稱不一定相同，可找 `localhost`、loopback、network inspection 或 web protection 一類的設定，先停用範圍最小的本機流量檢查，再重跑測試。
+
+如果環境政策不允許調整網路防護，Testcontainers 另有一條只改連線主機名的替代方式。在 `C:\Users\<你的帳號>\.testcontainers.properties` 加入：
+
+```ini
+host.override=localhost
+```
+
+這是 Testcontainers 的繞道，不是問題本身的修正。`localhost` 在這台機器會改走 IPv6 loopback，因此避開受影響的 IPv4 路徑。移到其他電腦或停用相關網路檢查後，應先移除這項設定再測一次。
+
+參考與追蹤：[AdGuard 進階設定說明](https://adguard.com/kb/adguard-for-windows/settings/app-settings/advanced-settings/)、[AdGuard for Windows #6242](https://github.com/AdguardTeam/AdguardForWindows/issues/6242)、[Docker Desktop #622](https://github.com/docker/desktop-feedback/issues/622)。
 
 ## 參考資料
 

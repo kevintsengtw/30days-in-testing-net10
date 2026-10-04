@@ -71,9 +71,9 @@ reportgenerator -reports:TestResults/coverage.cobertura.xml -targetdir:coverager
 ## 技術規格
 
 - **.NET**: 10.0
-- **測試框架**: xunit.v3.mtp-v2 3.2.2（Microsoft Testing Platform 模式）
-- **斷言庫**: AwesomeAssertions 9.5.0
-- **涵蓋率**: Microsoft.Testing.Extensions.CodeCoverage 18.9.0（cobertura 輸出）
+- **測試框架**: xunit.v3.mtp-v2 4.0.0（Microsoft Testing Platform 模式）
+- **斷言庫**: AwesomeAssertions 9.6.0
+- **涵蓋率**: Microsoft.Testing.Extensions.CodeCoverage 18.11.0（cobertura 輸出）
 - **測試數量**: 29 個（全數通過）
 
 ## 相關文章

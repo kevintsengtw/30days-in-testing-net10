@@ -149,10 +149,10 @@ public void Validate_使用FakeTimeProvider_應該正確計算年齡()
 
 ### 測試專案 (ValidationExample.Tests)
 
-- `xunit.v3.mtp-v2` (3.2.2)（Microsoft.Testing.Platform 模式）
-- `Microsoft.Testing.Extensions.TrxReport` (2.3.3)
+- `xunit.v3.mtp-v2` (4.0.0)（Microsoft.Testing.Platform 模式）
+- `Microsoft.Testing.Extensions.TrxReport` (2.4.0)
 - `FluentValidation` (12.1.1)（`FluentValidation.TestHelper` 命名空間隨主套件提供）
-- `AwesomeAssertions` (9.5.0)
+- `AwesomeAssertions` (9.6.0)
 - `Microsoft.Extensions.TimeProvider.Testing` (10.9.0)
 - `NSubstitute` (6.2.0)
 

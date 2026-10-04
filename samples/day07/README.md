@@ -55,10 +55,10 @@ Day07.DependencyReplacement.sln
 ### 使用的工具與技術
 
 - **.NET 10**：目標框架 `net10.0`
-- **xunit.v3.mtp-v2 3.2.2**：單元測試框架（Microsoft Testing Platform 模式）
+- **xunit.v3.mtp-v2 4.0.0**：單元測試框架（Microsoft Testing Platform 模式）
 - **NSubstitute 6.2.0**：測試替身框架
-- **AwesomeAssertions 9.5.0**：斷言程式庫
-- **Microsoft.Extensions.Logging 10.0.10**：結構化記錄
+- **AwesomeAssertions 9.6.0**：斷言程式庫
+- **Microsoft.Extensions.Logging 10.0.12**：結構化記錄
 - **GlobalUsings.cs**：全域 using 語句管理
 
 ### 測試特色
@@ -84,13 +84,13 @@ dotnet test --solution Day07.DependencyReplacement.sln -c Release --no-build \
 # 只執行單一測試專案
 dotnet test --project tests/Day07.Tests/Day07.Tests.csproj -c Release --no-build
 
-# 產生程式碼覆蓋率報告（Microsoft Code Coverage extension）
+# 產生程式碼涵蓋率報告（Microsoft Code Coverage extension）
 dotnet test --solution Day07.DependencyReplacement.sln -c Release --no-build \
     --coverage --coverage-output-format cobertura --coverage-output day07.cobertura.xml
 ```
 
 > xUnit v3 原生 MTP 模式不使用 VSTest 的 `--logger`、`--collect:"XPlat Code Coverage"` 參數；
-> 覆蓋率改用 Microsoft Testing Platform 的 CodeCoverage extension 搭配 `--coverage` 系列選項。
+> 涵蓋率改用 Microsoft Testing Platform 的 CodeCoverage extension 搭配 `--coverage` 系列選項。
 > 也可以直接執行 `./run-tests.ps1`（PowerShell）或 `./run-tests.sh`（bash）一次跑完上述流程。
 
 ## 測試案例說明

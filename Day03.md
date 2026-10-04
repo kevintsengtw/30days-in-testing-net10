@@ -5,8 +5,6 @@ sample: samples/day03
 target_framework: net10.0
 packages:
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
   - Microsoft.EntityFrameworkCore
   - Microsoft.EntityFrameworkCore.InMemory
@@ -1251,7 +1249,9 @@ xUnit 預設會嘗試並行執行測試以提升效率，但有一些重要的�
 
 #### 並行執行的層級
 
-1. **不同測試類別**：預設可並行執行
+下面三條講的是**預設模式**的行為。xUnit v3 4.0 起這個模式有了正式名稱 `collections`，另外多一個 `all` 模式可以選（見後面的「xUnit 設定檔」）：
+
+1. **不同測試類別**：可並行執行
 2. **相同測試類別內的方法**：依序執行（不並行）
 3. **Collection 內的類別**：依序執行（不並行）
 
@@ -1272,10 +1272,10 @@ public class ProductServiceTests
 
 #### 使用 Collection 控制並行執行
 
-當測試需要共享資源（如資料庫）時，使用 Collection 確保它們不會並行執行：
+當測試需要共享資源（如資料庫）時，把它們放進同一個 Collection，預設模式下就不會並行執行：
 
 ```csharp
-// 使用相同 Collection 的測試不會並行執行
+// 預設模式下，相同 Collection 的測試不會並行執行
 [Collection("Database Tests")]
 public class UserRepositoryTests
 {
@@ -1323,6 +1323,21 @@ public class SequentialCollection : ICollectionFixture<object>
   "maxParallelThreads": 4
 }
 ```
+
+xUnit v3 4.0 換了一組鍵名。舊的 `parallelizeTestCollections` 還是收，不急著改；新的 `parallelMode` 表達力好一些，因為它有三種值：
+
+```json
+{
+  "parallelMode": "collections",
+  "maxParallelThreads": 4
+}
+```
+
+- `none`：完全不並行，等同舊的 `"parallelizeTestCollections": false`
+- `collections`：**預設值**，不同 Collection 之間並行，同一個 Collection 內依序
+- `all`：連同一個 Collection 內的測試也一起並行
+
+`all` 是 4.0 才有的選項，而且要自己開。前面講的「相同 Collection 的測試不會並行」，指的就是 `collections` 這個預設模式；一旦換成 `all`，那條規則就不成立了，共享資源的測試會撞在一起。
 
 **實用建議**：
 
@@ -1433,7 +1448,7 @@ public class ProductsControllerTests { }
 
 4. **效能最佳化**：
    - 允許並行執行 → 使用不同 Collection 或無 Collection
-   - 需要序列執行 → 相同 Collection 或 DisableParallelization
+   - 需要序列執行 → 相同 Collection（預設模式下）或 DisableParallelization
 
 ---
 

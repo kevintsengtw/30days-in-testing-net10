@@ -17,8 +17,8 @@
 - [x] 移除 v3 專案的 `xunit`。
 - [x] 移除 v3 專案的 `Microsoft.NET.Test.Sdk`。
 - [x] 移除 v3 專案的 `xunit.runner.visualstudio`。
-- [x] 加入 `xunit.v3.mtp-v2` 3.2.2。
-- [x] 加入 `Microsoft.Testing.Extensions.TrxReport` 2.3.2。
+- [x] 加入 `xunit.v3.mtp-v2` 4.0.0。
+- [x] 加入 `Microsoft.Testing.Extensions.TrxReport` 2.4.0。
 - [x] 將 `<OutputType>` 設為 `Exe`。
 - [x] 保留 `<IsTestProject>true</IsTestProject>` 與 `<IsPackable>false</IsPackable>`。
 - [x] 以 per-day `Directory.Packages.props` 固定直接套件版本。

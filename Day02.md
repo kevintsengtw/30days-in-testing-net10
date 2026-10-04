@@ -5,8 +5,6 @@ sample: samples/day02
 target_framework: net10.0
 packages:
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
 ---
 
@@ -698,7 +696,7 @@ dotnet add tests/MyProject.Core.Tests/MyProject.Core.Tests.csproj reference src/
 
 ### 步驟二：設定測試專案的相依套件
 
-使用 `xunit3` 範本建立的測試專案，預設就會帶入 xUnit v3（MTP）所需的套件。本 repo 另外做了三件事：採用 Central Package Management（CPM），套件版本統一寫在 `Directory.Packages.props`，因此 `csproj` 裡的 `PackageReference` 不寫 `Version`；加入 `Microsoft.Testing.Extensions.TrxReport` 以便輸出 TRX 報告；再加入 `Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 讓 Visual Studio 與 Rider 的測試總管能正常探索測試（原因見下方 MTP 說明）。查看 `MyProject.Core.Tests.csproj`：
+使用 `xunit3` 範本建立的測試專案，預設就會帶入 xUnit v3（MTP）所需的套件。本 repo 另外做了兩件事：採用 Central Package Management（CPM），套件版本統一寫在 `Directory.Packages.props`，因此 `csproj` 裡的 `PackageReference` 不寫 `Version`；加入 `Microsoft.Testing.Extensions.TrxReport` 以便輸出 TRX 報告。查看 `MyProject.Core.Tests.csproj`：
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -715,9 +713,6 @@ dotnet add tests/MyProject.Core.Tests/MyProject.Core.Tests.csproj reference src/
 
   <ItemGroup>
     <PackageReference Include="xunit.v3.mtp-v2" />
-    <!-- IDE 測試總管相容:Rider 的 xUnit 探索需要 Microsoft.NET.Test.Sdk,VSTest 路徑另需 xunit.runner.visualstudio -->
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
   </ItemGroup>
 
@@ -732,12 +727,12 @@ dotnet add tests/MyProject.Core.Tests/MyProject.Core.Tests.csproj reference src/
 </Project>
 ```
 
-> 若你的專案沒有採用 CPM，也可以直接把版本寫在 `PackageReference` 上，例如 `<PackageReference Include="xunit.v3.mtp-v2" Version="3.2.2" />`；本 repo 為了讓所有範例的套件版本一致，才統一改用 `Directory.Packages.props` 管理。
+> 若你的專案沒有採用 CPM，也可以直接把版本寫在 `PackageReference` 上，例如 `<PackageReference Include="xunit.v3.mtp-v2" Version="4.0.0" />`；本 repo 為了讓所有範例的套件版本一致，才統一改用 `Directory.Packages.props` 管理。
 
 > **關於 Microsoft Testing Platform（MTP）**
 > xUnit v3 原生建構在 **Microsoft Testing Platform（MTP）** 之上。MTP 是微軟新一代的測試執行平台，用來取代自 Visual Studio 2010 以來驅動 `dotnet test` 與 Test Explorer 的舊引擎 VSTest。要留意的是，測試框架（xUnit）與執行平台（MTP）是兩件不同的事：前者決定你「怎麼寫測試」，後者決定「誰把測試跑起來、收集結果」。MTP 帶來的最明顯改變，就是**測試專案從類別庫變成獨立的可執行檔**，因此上面的 `csproj` 需要 `<OutputType>Exe</OutputType>`。
 >
-> 不過 IDE 的支援還在過渡期：Visual Studio 與 Rider 的**測試總管**探索測試時仍走 VSTest 路徑，缺少 `Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 的純 MTP 專案，測試總管會顯示不出任何測試。所以範例採取雙軌設定：命令列的 `dotnet test` 依 `global.json` 的 `"test": { "runner": "Microsoft.Testing.Platform" }` 走 MTP，IDE 測試總管則靠上面兩個套件走 VSTest 探索，兩邊互不干擾。
+> IDE 這邊不必另外做什麼。早年測試總管只認 VSTest，純 MTP 專案得補上 `Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 才列得出測試；現在 Visual Studio 2026 與 Rider 都直接支援 MTP，範例因此不帶這兩個套件。命令列則靠 `global.json` 的 `"test": { "runner": "Microsoft.Testing.Platform" }` 指定走 MTP。
 
 ### 步驟三：建立要測試的類別
 

@@ -14,9 +14,6 @@
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions" />
         <PackageReference Include="xunit.v3.mtp-v2" />
-        <!-- IDE 測試總管相容:Rider 的 xUnit 探索需要 Microsoft.NET.Test.Sdk,VSTest 路徑另需 xunit.runner.visualstudio -->
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="xunit.runner.visualstudio" />
         <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
         <!-- Day06 主題:MTP 原生涵蓋率擴充,dotnet test 加 coverage 旗標需要它才能輸出 cobertura -->
         <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />

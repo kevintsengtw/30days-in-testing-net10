@@ -55,19 +55,17 @@ Day08.TestingLoggingOutput/
 
 ### 主要專案 (Day08.TestingLoggingOutput.Core)
 
-- `Microsoft.Extensions.Logging.Abstractions` 10.0.10
-- `Microsoft.Extensions.DependencyInjection` 10.0.10
+- `Microsoft.Extensions.Logging.Abstractions` 10.0.12
+- `Microsoft.Extensions.DependencyInjection` 10.0.12
 
 ### 測試專案 (Day08.TestingLoggingOutput.Tests)
 
-- `xunit.v3.mtp-v2` 3.2.2
-- `Microsoft.NET.Test.Sdk` 18.8.1（IDE 測試總管相容，雙軌設定）
-- `xunit.runner.visualstudio` 3.1.5（IDE 測試總管相容，雙軌設定）
-- `Microsoft.Testing.Extensions.TrxReport` 2.3.3
-- `AwesomeAssertions` 9.5.0
+- `xunit.v3.mtp-v2` 4.0.0
+- `Microsoft.Testing.Extensions.TrxReport` 2.4.0
+- `AwesomeAssertions` 9.6.0
 - `NSubstitute` 6.2.0
-- `Microsoft.Extensions.Logging` 10.0.10
-- `Microsoft.Extensions.DependencyInjection` 10.0.10
+- `Microsoft.Extensions.Logging` 10.0.12
+- `Microsoft.Extensions.DependencyInjection` 10.0.12
 
 ## 執行方式
 

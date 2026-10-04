@@ -38,18 +38,18 @@ Day22.NoSqlTesting/
 
 ### 核心套件 (Day22.Core)
 - .NET 10 (net10.0)
-- MongoDB.Driver: 3.7.0
-- StackExchange.Redis: 2.12.1
+- MongoDB.Driver: 3.11.1
+- StackExchange.Redis: 3.1.31
 - System.Text.Json: 10.0.5
-- Microsoft.Bcl.TimeProvider: 10.0.5
+- Microsoft.Bcl.TimeProvider: 10.0.12
 
 ### 測試套件 (Day22.Integration.Tests)
-- xunit.v3.mtp-v2: 3.2.2（xUnit v3，走 Microsoft.Testing.Platform）
-- Microsoft.Testing.Extensions.TrxReport: 2.2.3
-- AwesomeAssertions: 9.4.0
-- Testcontainers: 4.11.0／Testcontainers.MongoDb: 4.11.0／Testcontainers.Redis: 4.11.0
-- NSubstitute: 5.3.0
-- Microsoft.Extensions.TimeProvider.Testing: 10.4.0
+- xunit.v3.mtp-v2: 4.0.0（xUnit v3，走 Microsoft.Testing.Platform）
+- Microsoft.Testing.Extensions.TrxReport: 2.4.0
+- AwesomeAssertions: 9.6.0
+- Testcontainers: 4.15.0／Testcontainers.MongoDb: 4.15.0／Testcontainers.Redis: 4.15.0
+- NSubstitute: 6.2.0
+- Microsoft.Extensions.TimeProvider.Testing: 10.9.0
 
 > 版本統一集中在 per-day 的 `Directory.Packages.props`（CPM）；測試專案 `.csproj` 需加 `<OutputType>Exe</OutputType>`。
 

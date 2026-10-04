@@ -5,8 +5,6 @@ sample: samples/day01
 target_framework: net10.0
 packages:
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
 ---
 

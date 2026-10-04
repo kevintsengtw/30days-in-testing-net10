@@ -39,7 +39,7 @@ Day04.AwesomeAssertions.sln
 ### 前置需求
 
 - .NET 10 SDK
-- Visual Studio 2022 或 VS Code
+- Visual Studio 2026、JetBrains Rider 或 VS Code
 
 ### 執行測試
 
@@ -66,8 +66,8 @@ dotnet test --solution Day04.AwesomeAssertions.sln --report-trx --report-trx-fil
 ## 技術規格
 
 - **.NET**: 10.0
-- **測試框架**: xunit.v3.mtp-v2 3.2.2（Microsoft Testing Platform 模式）
-- **斷言庫**: AwesomeAssertions 9.5.0
+- **測試框架**: xunit.v3.mtp-v2 4.0.0（Microsoft Testing Platform 模式）
+- **斷言庫**: AwesomeAssertions 9.6.0
 - **測試數量**: 40 個（12 個測試類別，全數通過）
 
 ## 測試範例說明

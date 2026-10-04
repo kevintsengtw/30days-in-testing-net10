@@ -27,10 +27,10 @@ Day19.Samples/
 - **.NET 10 / ASP.NET Core** - Web API 框架
 - **Entity Framework Core 10.0.5** - ORM 框架（InMemory 提供者）
 - **InMemory Database** - 測試用記憶體資料庫（基礎篇適用）
-- **xunit.v3.mtp-v2 3.2.2** - 測試框架（xUnit v3，走 Microsoft.Testing.Platform）
-- **AwesomeAssertions 9.4.0** - 流暢的斷言語法
-- **AwesomeAssertions.Web 1.9.6** - HTTP 回應斷言
-- **Microsoft.AspNetCore.Mvc.Testing 10.0.5** - 整合測試支援
+- **xunit.v3.mtp-v2 4.0.0** - 測試框架（xUnit v3，走 Microsoft.Testing.Platform）
+- **AwesomeAssertions 9.6.0** - 流暢的斷言語法
+- **AwesomeAssertions.Web 2.0.3** - HTTP 回應斷言
+- **Microsoft.AspNetCore.Mvc.Testing 10.0.12** - 整合測試支援
 
 ### 整合測試架構設計
 - **CustomWebApplicationFactory** - 自訂測試環境設定
@@ -102,7 +102,7 @@ Day19.Samples/
 
 ### 環境需求
 - .NET 10.0 或更高版本
-- Visual Studio 2022 或 VS Code
+- Visual Studio 2026、JetBrains Rider 或 VS Code
 
 ### 建置與執行
 

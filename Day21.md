@@ -12,8 +12,6 @@ packages:
   - SSH.NET
   - Testcontainers.MsSql
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 21 - Testcontainers 整合測試：MSSQL + EF Core 以及 Dapper 基礎應用
@@ -31,6 +29,7 @@ packages:
 - [5. Dapper Repository 整合測試](#5-dapper-repository-整合測試)
 - [6. 重點整理](#6-重點整理)
 - [在本機執行測試（MTP）](#在本機執行測試mtp)
+- [附錄：Windows 上的 SQL Server 連線逾時](#附錄windows-上的-sql-server-連線逾時)
 - [參考資料](#參考資料)
 
 <!-- /toc -->
@@ -129,14 +128,16 @@ MSSQL 在 .NET 專案中很常見。Testcontainers.MsSql 能啟動相同的資�
 
 **MSSQL + EF Core + Dapper 必要套件**：
 
-- **測試框架**：`xunit.v3.mtp-v2` (3.2.2)、`Microsoft.Testing.Extensions.TrxReport` (2.3.3)、`AwesomeAssertions` (9.5.0)、`Microsoft.NET.Test.Sdk` (18.8.1)、`xunit.runner.visualstudio` (3.1.5)
-- **EF Core**：`Microsoft.EntityFrameworkCore.SqlServer` (10.0.10)
-- **MSSQL 容器**：`Testcontainers.MsSql` (4.13.0)
+- **測試框架**：`xunit.v3.mtp-v2` (4.0.0)、`Microsoft.Testing.Extensions.TrxReport` (2.4.0)、`AwesomeAssertions` (9.6.0)
+- **EF Core**：`Microsoft.EntityFrameworkCore.SqlServer` (10.0.12)
+- **MSSQL 容器**：`Testcontainers.MsSql` (4.15.0)
 - **Dapper**：`Dapper` (2.1.79)
 
-比起 xUnit v2，這裡拿掉了 `xunit`，改由 `xunit.v3.mtp-v2` 涵蓋。`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 則留著。IDE 的支援還在過渡期，Visual Studio 與 Rider 的**測試總管**探索測試仍走 VSTest 路徑，缺了這兩個套件就一個測試也顯示不出來。所以範例採雙軌設定：命令列的 `dotnet test` 依 `global.json` 走 MTP，IDE 測試總管靠這兩個套件走 VSTest 探索，兩邊互不干擾。 xUnit v3 走 Microsoft.Testing.Platform（MTP），測試專案本身是可執行檔，`.csproj` 要加 `<OutputType>Exe</OutputType>`；`PackageReference` 只列名稱、不寫版本，版本統一集中在 per-day `Directory.Packages.props`（CPM）。
+比起 xUnit v2，這裡拿掉了 `xunit`，改由 `xunit.v3.mtp-v2` 涵蓋。`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 也一起拿掉了。這兩個屬於 VSTest 那一套：早年 IDE 測試總管只認 VSTest，純 MTP 專案不補上它們就一個測試也列不出來。現在 Visual Studio 2026 與 Rider 都探索得到 MTP 專案，留著只是多兩個用不到的相依。命令列這邊由 `global.json` 的 `"test": { "runner": "Microsoft.Testing.Platform" }` 決定走 MTP。
 
-**關於 `Microsoft.Data.SqlClient`**：Dapper 使用 `SqlConnection` 連 MSSQL，因此會用到 `Microsoft.Data.SqlClient`，但**測試專案不需要顯式安裝**。它隨 `Microsoft.EntityFrameworkCore.SqlServer` 10.0.10 傳遞相依進來（實際解析版本為 6.1.1），在 `GlobalUsings.cs` 加上 `global using Microsoft.Data.SqlClient;` 即可使用。請選 `Microsoft.Data.SqlClient`，不要使用舊版的 `System.Data.SqlClient`。
+xUnit v3 走 Microsoft.Testing.Platform（MTP），測試專案本身是可執行檔，`.csproj` 要加 `<OutputType>Exe</OutputType>`；`PackageReference` 只列名稱、不寫版本，版本統一集中在 per-day `Directory.Packages.props`（CPM）。
+
+**關於 `Microsoft.Data.SqlClient`**：Dapper 使用 `SqlConnection` 連 MSSQL，因此會用到 `Microsoft.Data.SqlClient`，但**測試專案不需要顯式安裝**。它隨 `Microsoft.EntityFrameworkCore.SqlServer` 10.0.12 傳遞相依進來（實際解析版本為 6.1.6），在 `GlobalUsings.cs` 加上 `global using Microsoft.Data.SqlClient;` 即可使用。請選 `Microsoft.Data.SqlClient`，不要使用舊版的 `System.Data.SqlClient`。
 
 ### 測試資料準備
 
@@ -1758,6 +1759,29 @@ xUnit v3 走 Microsoft Testing Platform（MTP），runner 由本日 sample 的 `
 Set-Location samples/day21
 dotnet test --solution Day21.DatabaseTesting.sln -c Release
 ```
+
+## 附錄：Windows 上的 SQL Server 連線逾時
+
+這個問題只出現在部分 Windows 環境。如果整批 SQL Server 測試都停在登入前交握，TCP 連線卻能建立，先檢查防毒軟體、EDR、VPN、廣告攔截器或其他網路防護工具。問題可能不在 Testcontainers 或 Docker，而是主機上的軟體正在檢查 IPv4 loopback 流量。
+
+```text
+Microsoft.Data.SqlClient.SqlException : 已超過連接逾時的設定。
+在嘗試使用登入前的信號交換確認時超過逾時等待的時間。
+```
+
+本機使用 AdGuard v8 與 WFP 驅動時，只要開啟 `Filter localhost`，`127.0.0.1` 的 TDS PRELOGIN 回應就只剩前 9／26 bytes。關閉 `Settings → App settings → Advanced settings → Filter localhost` 後，AdGuard 服務仍維持執行，主機端與 Docker SQL Server 的三次測試都收到完整 26 bytes。
+
+其他防護軟體未必使用相同名稱。可以找 localhost、loopback、network inspection 或 web protection 相關設定，先排除本機流量檢查，再判斷容器或測試程式是否有問題。
+
+如果無法調整網路防護，可以在 `C:\Users\<你的帳號>\.testcontainers.properties` 暫時加入：
+
+```ini
+host.override=localhost
+```
+
+這項設定會讓 Testcontainers 用 `localhost` 組連線字串。在這台機器上，它會改走正常的 IPv6 loopback；這是替代路徑，不是根本修正。換電腦或調整網路防護後，記得移除設定再測一次。
+
+參考與追蹤：[AdGuard 進階設定說明](https://adguard.com/kb/adguard-for-windows/settings/app-settings/advanced-settings/)、[AdGuard for Windows #6242](https://github.com/AdguardTeam/AdguardForWindows/issues/6242)、[Docker Desktop #622](https://github.com/docker/desktop-feedback/issues/622)。
 
 ## 參考資料
 

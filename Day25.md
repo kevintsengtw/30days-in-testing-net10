@@ -24,8 +24,6 @@ packages:
   - Microsoft.Testing.Extensions.TrxReport
   - Respawn
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 25 - .NET Aspire 整合測試實戰：從 Testcontainers 到 .NET Aspire Testing
@@ -62,13 +60,13 @@ packages:
 
 Day23 已經用 Testcontainers 啟動 PostgreSQL 與 Redis，再透過測試用的 WebApplicationFactory 驗證 API。Day25 的問題不同：當應用程式本身已採用 Aspire，能不能直接重用 AppHost 描述的整套資源模型，不再在測試專案維護另一份容器設定？
 
-可以。Aspire Testing 能在測試處理程序裡啟動 AppHost，取得資源連線字串與 endpoint，並在測試結束後清掉整個 session。本篇保留 Day25 原本的 PostgreSQL、Redis、Web API 與 16 個測試，只更新到 .NET 10、Aspire 13.4.6 與 xUnit v3 + Microsoft Testing Platform。
+可以。Aspire Testing 能在測試處理程序裡啟動 AppHost，取得資源連線字串與 endpoint，並在測試結束後清掉整個 session。本篇保留 Day25 原本的 PostgreSQL、Redis、Web API 與 16 個測試，只更新到 .NET 10、Aspire 13.5.3 與 xUnit v3 + Microsoft Testing Platform。
 
 先說清楚 Day23 在這裡扮演的角色：它是 Testcontainers 作法的比較基準，不是這次要改寫的物件。Day25 不會回頭修改 Day23，也不會把 Day23 後續遷移時新增的功能搬進來。專案設定與驗證流程則沿用 Day19～24 已經驗證過的 per-day CPM、MTP、連續測試、TRX 與 portability 作法。
 
 ## 本篇內容
 
-- 將 AppHost 從 Aspire 9.x 格式升級到 Aspire 13.4.6
+- 將 AppHost 從 Aspire 9.x 格式升級到 Aspire 13.5.3
 - 用 AppHost 編排 PostgreSQL 18.3、Redis 與 Web API
 - 將 xUnit v2 遷移到 xUnit v3 + MTP
 - 用 health state、實際連線與 HTTP request 判斷服務就緒
@@ -142,28 +140,30 @@ Day25 新增自己的 `Directory.Packages.props`，因此複製到 repo 外也�
   </PropertyGroup>
 
   <ItemGroup Label="Aspire">
-    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Hosting.Redis" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Npgsql" Version="13.4.6" />
-    <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.4.6" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.5.3" />
+    <PackageVersion Include="Aspire.Hosting.Redis" Version="13.5.3" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.5.3" />
+    <PackageVersion Include="Aspire.Npgsql" Version="13.5.3" />
+    <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.5.3" />
   </ItemGroup>
 
   <ItemGroup Label="Application">
     <PackageVersion Include="Dapper" Version="2.1.79" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.OpenApi" Version="2.11.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.12.2" />
     <PackageVersion Include="Npgsql" Version="10.0.3" />
-    <PackageVersion Include="StackExchange.Redis" Version="3.1.13" />
+    <PackageVersion Include="StackExchange.Redis" Version="3.1.31" />
   </ItemGroup>
 </Project>
 ```
 
-Aspire SDK、Hosting、Testing 與 client integrations 使用同一個 13.4.6 patch。`Microsoft.Extensions.*` 也對齊到 10.0.10，排除遷移前的 `NU1605`。
+Aspire SDK、Hosting、Testing 與 client integrations 使用同一個 13.5.3 patch。`Microsoft.Extensions.*` 也對齊到 10.0.12，排除遷移前的 `NU1605`。
 
-這次有一個刻意的 transitive pin。`Microsoft.AspNetCore.OpenApi` 10.0.10 會帶入具有高嚴重性公告的 `Microsoft.OpenApi` 2.0.0。直接跳到 3.x 會多承擔一次 major upgrade，因此先釘選相容的 2.x 最新穩定版 2.11.0，再用完整 API 測試與 vulnerable audit 確認結果。
+這次有一個刻意的 transitive pin。`Microsoft.OpenApi` 程式碼裡沒有直接用到，是 `Microsoft.AspNetCore.OpenApi` 帶進來的。當初會釘它，是因為早期版本會拉到命中高嚴重性公告的 2.0.0。
+
+這個理由現在已經由框架自己解決了——`Microsoft.AspNetCore.OpenApi` 10.0.11 把相依區間收成 `[2.7.5, 3.0.0)`，10.0.12 再把下限拉到 2.12.0，不會再解析到有問題的版本。釘選仍然留著，但目的變了：區間是會浮動的，寫死才知道實際裝進來的是哪一版。這裡釘 2.12.2，是區間內的 2.x 最新穩定版。不跳 3.x——那個 major 落在區間外，而且 `Microsoft.AspNetCore.OpenApi` 的 source generator 產生的程式碼會編不過。
 
 另外移除幾個範例沒有直接使用的套件：
 
@@ -192,12 +192,13 @@ Aspire 9.x 的 AppHost 使用雙 SDK 格式：
 Aspire 13 改由 AppHost SDK 當作專案 SDK：
 
 ```xml
-<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
+<Project Sdk="Aspire.AppHost.Sdk/13.5.3">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);ASPIRE010</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -208,6 +209,8 @@ Aspire 13 改由 AppHost SDK 當作專案 SDK：
 ```
 
 `IsAspireHost` 與 `Aspire.Hosting.AppHost` 直接參考都不再需要。保留舊設定不一定立刻編譯失敗，卻會讓 SDK 自動提供的內容與手動參考重複，之後更難判斷版本來源。
+
+`NoWarn` 那一行是 Aspire 13.5 之後才需要的。13.5.0 起，AppHost 沒有啟用 Aspire CLI bundle 就會發出 `ASPIRE010`。照提示把 `AspireUseCliBundle` 設成 `true` 也不行：沒裝 Aspire CLI 的機器會改以 `ASPIRE009` 建置失敗。這個範例不要求安裝 Aspire CLI，所以抑制這則提示。
 
 ## 在 AppHost 編排三個服務
 
@@ -266,7 +269,7 @@ per-day `global.json` 使用與 Day19～24 相同的格式：
 }
 ```
 
-`latestFeature` 會在相同 major/minor（10.0）中，選擇不低於 10.0.300 的最高已安裝 feature band 與 patch；本次環境選到 10.0.302。
+`latestFeature` 會在相同 major/minor（10.0）中，選擇不低於 10.0.300 的最高已安裝 feature band 與 patch；遷移當時的環境選到 10.0.302。
 
 測試專案的核心設定是：
 
@@ -563,6 +566,8 @@ Build succeeded.
 - `samples/day25/TestResults/day25-run1.trx`
 - `samples/day25/TestResults/day25-run2.trx`
 
+上面的環境與耗時是遷移當時在 Aspire 13.4.6 量到的。2026-10-04 改用 Aspire 13.5.3、.NET SDK 10.0.401、Docker 29.8.1 在 Windows 重跑，16／16 通過，耗時 32.0 秒，build 0 warnings、0 errors。
+
 測試結束後沒有 Day25 Aspire container 或 DCP process 殘留。環境中原有的 `C:\docker\mssql` 與 `C:\docker\redis` Compose container 不屬於本範例，也沒有被測試修改。
 
 ## NuGet 套件稽核
@@ -573,11 +578,13 @@ dotnet list Day25.AspireIntegration.sln package --deprecated --include-transitiv
 dotnet list Day25.AspireIntegration.sln package --vulnerable --include-transitive
 ```
 
-結果：
+2026-10-04 的結果：
 
-- Direct outdated：0
 - Deprecated（含 transitive）：0
 - Vulnerable（含 transitive）：0
+- Direct outdated：10 個套件。Aspire 五個套件有 13.6.0，另外是 `Dapper` 2.1.89、`StackExchange.Redis` 3.3.1、`AwesomeAssertions.Web` 2.0.4、`xunit.v3.mtp-v2` 4.0.1 與 `Microsoft.Testing.Extensions.TrxReport` 2.4.1
+
+outdated 不是 0。這些都是上次對齊版本之後才發佈的，範例沒有逐版追；要升就跟 Day24 和系列其他天數一起升、一起重跑測試。
 
 遷移前看到的 MessagePack、Microsoft.OpenApi 與 OpenTelemetry advisories 都已排除。這比「restore 沒失敗」更接近可交付的套件狀態。
 
@@ -639,7 +646,7 @@ Day25 同時有 PostgreSQL、Redis 與 API，而且 production 專案已使用 A
 
 Day25 更新 NuGet 版本之外，也重新整理 AppHost、測試生命週期與資料隔離，讓多服務整合測試有可重現的執行條件。
 
-完成後的狀態是：.NET 10、Aspire 13.4.6、xUnit v3 + MTP、PostgreSQL 18.3、Redis 與 API 實際探測、16 個測試連續通過、套件稽核無 outdated／deprecated／vulnerable，並通過 repo 外 portability。
+完成後的狀態是：.NET 10、Aspire 13.5.3、xUnit v3 + MTP、PostgreSQL 18.3、Redis 與 API 實際探測、16 個測試連續通過、套件稽核無 deprecated／vulnerable，並通過 repo 外 portability。
 
 Day24 處理單一 SQL Server resource；Day25 再把相同原則擴展到 PostgreSQL、Redis 與 Web API。兩篇的主題沒有混在一起，但遷移方法與證據格式現在一致，可以放在同一次人工審查中比較。
 

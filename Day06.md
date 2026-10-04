@@ -6,8 +6,6 @@ target_framework: net10.0
 packages:
   - AwesomeAssertions
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
   - Microsoft.Testing.Extensions.CodeCoverage
 ---
@@ -160,7 +158,7 @@ dotnet add package Microsoft.Testing.Extensions.CodeCoverage
 dotnet test --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
 ```
 
-> 實測版本矩陣（驗證日期 2026-08-11）：.NET SDK 10.0.302、xUnit v3 3.2.2、`Microsoft.Testing.Extensions.CodeCoverage` 18.9.0，於範例專案 `samples/day06` 實際執行測試並產出 cobertura 涵蓋率報告（輸出於 `TestResults/coverage.cobertura.xml`）。範例專案的 `Directory.Packages.props` 使用的就是 18.9.0，不需要刻意 pin 到更舊的版本。
+> 實測版本矩陣（驗證日期 2026-09-09）：.NET SDK 10.0.401、xUnit v3 4.0.0、`Microsoft.Testing.Extensions.CodeCoverage` 18.11.0，於範例專案 `samples/day06` 實際執行測試並產出 cobertura 涵蓋率報告（輸出於 `TestResults/coverage.cobertura.xml`）。範例專案的 `Directory.Packages.props` 用的就是 18.11.0，不需要刻意 pin 到更舊的版本。
 
 看過三種工具後，要特別留意一件事：這裡產出的 `coverage.cobertura.xml`，與前面 Visual Studio「`匯出結果`」預設存出的自家 XML **同為 XML 檔，內容格式卻不同**。Cobertura 是開放格式，根節點為 `<coverage>`，以 package → class → line 組織並帶分支統計；自家格式根節點為 `<results>`，以 module → function → range 逐行記錄、沒有分支資料。ReportGenerator 兩種都讀得懂，但只支援 Cobertura 的工具（例如部分 CI 涵蓋率服務）吃不下自家格式——交檔案給其他系統前，先確認拿到的是哪一種。
 

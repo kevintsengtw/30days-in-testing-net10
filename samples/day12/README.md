@@ -22,11 +22,11 @@
 ### 核心框架
 - **.NET**: 10.0
 - **C#**: 最新版本（top-level statements）
-- **xunit.v3.mtp-v2**: 3.2.2（Microsoft.Testing.Platform）
+- **xunit.v3.mtp-v2**: 4.0.0（Microsoft.Testing.Platform）
 
 ### 測試相關套件
 - **AutoFixture.Xunit3**: 4.19.0 - AutoData 屬性整合
-- **AwesomeAssertions**: 9.5.0 - 現代化斷言語法
+- **AwesomeAssertions**: 9.6.0 - 現代化斷言語法
 - **CsvHelper**: 33.1.0 - CSV 檔案讀取
 - **System.Text.Json**: 內建 - JSON 資料處理
 

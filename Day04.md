@@ -6,8 +6,6 @@ target_framework: net10.0
 packages:
   - AwesomeAssertions
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
 ---
 
@@ -102,7 +100,7 @@ AwesomeAssertions 是一個現代化的 .NET 測試 Assertions Library，設計�
 
 **關於 AwesomeAssertions**：
 
-AwesomeAssertions 是 FluentAssertions 的社群分支版本，使用 Apache 2.0 授權。本章節使用 **AwesomeAssertions 9.5.0** 版本，該版本的 API 與 FluentAssertions 高度相容。
+AwesomeAssertions 是 FluentAssertions 的社群分支版本，使用 Apache 2.0 授權。本章節使用 **AwesomeAssertions 9.6.0** 版本，該版本的 API 與 FluentAssertions 高度相容。
 
 #### 核心特色
 
@@ -125,7 +123,7 @@ Install-Package AwesomeAssertions
 dotnet add package AwesomeAssertions
 
 # 使用 PackageReference (推薦)
-<PackageReference Include="AwesomeAssertions" Version="9.5.0" PrivateAssets="all" />
+<PackageReference Include="AwesomeAssertions" Version="9.6.0" PrivateAssets="all" />
 ```
 
 #### 命名空間引用

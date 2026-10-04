@@ -154,11 +154,9 @@ var products = BogusDataGenerator.GenerateProducts(10000);
 | **AutoFixture**                            | 4.18.1 | 測試資料產生框架                       |
 | **AutoFixture.AutoNSubstitute**            | 4.18.1 | AutoFixture 的 NSubstitute 整合        |
 | **NSubstitute**                            | 6.2.0  | 模擬框架                               |
-| **xunit.v3.mtp-v2**                        | 3.2.2  | 測試框架（Microsoft.Testing.Platform） |
-| **Microsoft.Testing.Extensions.TrxReport** | 2.3.3  | TRX 測試報告                           |
-| **AwesomeAssertions**                      | 9.5.0  | 更好的斷言語法                         |
-| **xunit.runner.visualstudio**              | 3.1.5  | IDE 測試總管（VSTest 探索）            |
-| **Microsoft.NET.Test.Sdk**                 | 18.8.1 | IDE 測試總管相容                       |
+| **xunit.v3.mtp-v2**                        | 4.0.0  | 測試框架（Microsoft.Testing.Platform） |
+| **Microsoft.Testing.Extensions.TrxReport** | 2.4.0  | TRX 測試報告                           |
+| **AwesomeAssertions**                      | 9.6.0  | 更好的斷言語法                         |
 
 > **關於 NU1608 警告**：NSubstitute 與全系列對齊升至 6.x，AutoFixture.AutoNSubstitute 4.18.1 宣告的相依上限是 NSubstitute < 6.0.0，因此 restore／build 會出現 NU1608 警告。這是預期行為，功能不受影響（28/28 測試通過），詳細說明見 Day13 文章「關於 NU1608 警告」一節。
 

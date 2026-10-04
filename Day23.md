@@ -26,8 +26,6 @@ packages:
   - Testcontainers.PostgreSql
   - Testcontainers.Redis
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 23 - 整合測試實戰：WebApi 服務的整合測試
@@ -563,7 +561,7 @@ public abstract class IntegrationTestBase : IAsyncLifetime
 
 ### xunit v3 與 MTP 對整合測試的影響
 
-本系列樣本已從 xUnit v2 遷到 v3（走 Microsoft.Testing.Platform）。整合測試專案的 `.csproj` 拿掉了 `xunit` 與 `coverlet.collector`，改由 `xunit.v3.mtp-v2` 涵蓋（`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 留著走 IDE 測試總管的 VSTest 探索，與命令列的 MTP 並行不悖），並加 `Microsoft.Testing.Extensions.TrxReport` 產生 TRX；測試專案本身是可執行檔，要加 `<OutputType>Exe</OutputType>`，版本統一集中在 per-day 的 `Directory.Packages.props`（CPM）。
+本系列樣本已從 xUnit v2 遷到 v3（走 Microsoft.Testing.Platform）。整合測試專案的 `.csproj` 拿掉了 `xunit` 與 `coverlet.collector`，改由 `xunit.v3.mtp-v2` 涵蓋（`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 這兩個 VSTest 時代的套件也一併拿掉——Visual Studio 2026 與 Rider 都探索得到 MTP 專案，不必再補），並加 `Microsoft.Testing.Extensions.TrxReport` 產生 TRX；測試專案本身是可執行檔，要加 `<OutputType>Exe</OutputType>`，版本統一集中在 per-day 的 `Directory.Packages.props`（CPM）。
 
 `IAsyncLifetime` 的回傳型別在 v3 改了：`InitializeAsync`／`DisposeAsync` 從 `Task` 改成 `ValueTask`（`DisposeAsync` 現在來自 `IAsyncDisposable`），方法體不用動。上面的 `IntegrationTestBase` 已是 v3 寫法。要特別留意 `TestWebApplicationFactory`：它繼承 `WebApplicationFactory<Program>`（本身就有 `virtual ValueTask DisposeAsync()`），v3 下 `IAsyncLifetime.DisposeAsync` 與它同簽章，覆寫要用 `public override async ValueTask DisposeAsync()`（v2 時代那個 `new async Task DisposeAsync()` 的寫法要改）。`ICollectionFixture`／`[CollectionDefinition]`／`[Collection]` 在 v3 同構，維持原樣。
 

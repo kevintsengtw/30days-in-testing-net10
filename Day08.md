@@ -10,8 +10,6 @@ packages:
   - Microsoft.Extensions.Logging.Abstractions
   - NSubstitute
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
 ---
 
@@ -100,9 +98,6 @@ packages:
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions"/>
         <PackageReference Include="xunit.v3.mtp-v2"/>
-        <!-- IDE 測試總管相容:Rider 的 xUnit 探索需要 Microsoft.NET.Test.Sdk,VSTest 路徑另需 xunit.runner.visualstudio -->
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="xunit.runner.visualstudio" />
         <PackageReference Include="Microsoft.Testing.Extensions.TrxReport"/>
         <PackageReference Include="NSubstitute"/>
         <PackageReference Include="Microsoft.Extensions.Logging"/>
@@ -118,9 +113,8 @@ packages:
 
 幾個重點：
 
-- **`xunit.v3.mtp-v2` 3.2.2**：xUnit v3 對應 MTP v2 的 metapackage，框架與執行器一次到位。
+- **`xunit.v3.mtp-v2` 4.0.0**：xUnit v3 對應 MTP v2 的 metapackage，框架與執行器一次到位。
 - **`<OutputType>Exe</OutputType>`**：在 MTP 之下，測試專案是獨立的可執行檔，不再是類別庫。
-- **`Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio`**：IDE 的支援還在過渡期，Visual Studio 與 Rider 的**測試總管**探索測試仍走 VSTest 路徑，純 MTP 專案在測試總管會顯示不出任何測試。所以範例採雙軌設定：命令列的 `dotnet test` 依 `global.json` 走 MTP，IDE 測試總管靠這兩個套件走 VSTest 探索，兩邊互不干擾。
 - **`<DisableMsCoverageReferencedPathMaps>`**：關閉 Microsoft.CodeCoverage 每次建置都重寫 source root mapping 檔的行為，避免 IDE 專案系統反覆重新評估。
 - **`Microsoft.Testing.Extensions.TrxReport`**：讓 MTP 能產出 TRX 測試報告。
 - `PackageReference` 都不寫版本：版本集中在 `samples/day08/Directory.Packages.props`（CPM）管理。

@@ -9,8 +9,6 @@ packages:
   - CsvHelper
   - Microsoft.Testing.Extensions.TrxReport
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 12 - 結合 AutoData：xUnit 與 AutoFixture 的整合應用

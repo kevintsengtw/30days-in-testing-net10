@@ -60,7 +60,7 @@ samples/day28/
     └── TUnit.Advanced.Lifecycle.Tests/
 ```
 
-本篇使用 .NET 10、TUnit 1.65.0、AutoFixture 4.18.1 與 Microsoft.Extensions.DependencyInjection 10.0.10。套件版本由 `samples/day28/Directory.Packages.props` 管理。
+本篇使用 .NET 10、TUnit 1.66.27、AutoFixture 4.18.1 與 Microsoft.Extensions.DependencyInjection 10.0.12。套件版本由 `samples/day28/Directory.Packages.props` 管理。
 
 ## 先選對資料來源
 

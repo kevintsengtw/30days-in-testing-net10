@@ -11,8 +11,6 @@ packages:
   - System.IO.Abstractions
   - System.IO.Abstractions.TestingHelpers
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 17 - 檔案與 IO 測試：使用 System.IO.Abstractions 模擬檔案系統 - 打造可測試的檔案操作

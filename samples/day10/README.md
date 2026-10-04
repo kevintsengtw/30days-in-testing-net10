@@ -191,8 +191,8 @@ dotnet test --filter-class "AutoFixture.Tests.BasicGeneration.BasicTypesGenerati
 
 - **AutoFixture** (4.18.1)：核心 AutoFixture 功能
 - **AutoFixture.Xunit3** (4.19.0)：xUnit v3 整合
-- **AwesomeAssertions** (9.5.0)：流暢的斷言語法
-- **xunit.v3.mtp-v2** (3.2.2)：測試框架（Microsoft.Testing.Platform）
+- **AwesomeAssertions** (9.6.0)：流暢的斷言語法
+- **xunit.v3.mtp-v2** (4.0.0)：測試框架（Microsoft.Testing.Platform）
 
 ## 學習重點
 

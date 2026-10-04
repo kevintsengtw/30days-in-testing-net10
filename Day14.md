@@ -11,8 +11,6 @@ packages:
   - Microsoft.Testing.Extensions.TrxReport
   - NSubstitute
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 14 - Bogus 入門：與 AutoFixture 的差異比較

@@ -13,8 +13,6 @@ packages:
   - Microsoft.Testing.Extensions.TrxReport
   - NSubstitute
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 16 - 測試日期與時間：Microsoft.Bcl.TimeProvider 取代 DateTime

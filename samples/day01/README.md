@@ -100,9 +100,9 @@ dotnet test --solution Day01.FirstPrinciples.sln --report-trx --report-trx-filen
 ## 技術規格
 
 - **.NET**: 10.0
-- **測試框架**: xunit.v3.mtp-v2 3.2.2（Microsoft Testing Platform 模式）
+- **測試框架**: xunit.v3.mtp-v2 4.0.0（Microsoft Testing Platform 模式）
 - **程式語言**: C#
-- **IDE**: Visual Studio 2022 / VS Code
+- **IDE**: Visual Studio 2026 / JetBrains Rider / VS Code
 - **測試數量**: 82 個（全數通過，無外部相依，執行時間約 2 秒）
 
 ## 學習重點
@@ -141,7 +141,7 @@ dotnet test --solution Day01.FirstPrinciples.sln --report-trx --report-trx-filen
 - **進階斷言**：AwesomeAssertions 的流暢語法（本系列 Day04 起介紹）
 - **測試資料產生**：AutoFixture 與 Bogus（本系列 Day10 起介紹）
 - **測試組織**：Test Fixtures 與 Test Collections
-- **測試覆蓋率**：程式碼覆蓋率分析
+- **測試涵蓋率**：程式碼涵蓋率分析
 
 ---
 

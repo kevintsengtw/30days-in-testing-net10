@@ -11,8 +11,6 @@ packages:
   - Microsoft.Extensions.Logging.Console
   - NSubstitute
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
   - Microsoft.Testing.Extensions.CodeCoverage
 ---
@@ -711,7 +709,7 @@ dotnet add package AwesomeAssertions
 dotnet add package Microsoft.Extensions.Logging
 ```
 
-測試專案本身還需要 xUnit v3 與測試平台套件：`xunit.v3.mtp-v2`、`Microsoft.NET.Test.Sdk`、`xunit.runner.visualstudio`（IDE 測試總管用）與 `Microsoft.Testing.Extensions.TrxReport`。範例專案採中央套件版本管理（CPM），版本統一寫在 `samples/day07/Directory.Packages.props`，csproj 不寫版本號。
+測試專案本身還需要 xUnit v3 與測試平台套件：`xunit.v3.mtp-v2` 與 `Microsoft.Testing.Extensions.TrxReport`。範例專案採中央套件版本管理（CPM），版本統一寫在 `samples/day07/Directory.Packages.props`，csproj 不寫版本號。
 
 ### 基本測試設定
 
@@ -1210,7 +1208,7 @@ public class FileBackupServiceCompositionTests
 dotnet test --solution Day07.DependencyReplacement.sln --report-trx --report-trx-filename day07.trx
 ```
 
-MTP 模式不使用 VSTest 的 `--logger`、`--collect:"XPlat Code Coverage"` 參數；覆蓋率改用 `Microsoft.Testing.Extensions.CodeCoverage` 搭配 `--coverage` 系列選項，完整指令見範例專案的 README。
+MTP 模式不使用 VSTest 的 `--logger`、`--collect:"XPlat Code Coverage"` 參數；涵蓋率改用 `Microsoft.Testing.Extensions.CodeCoverage` 搭配 `--coverage` 系列選項，完整指令見範例專案的 README。
 
 ## 常見陷阱與最佳實務
 

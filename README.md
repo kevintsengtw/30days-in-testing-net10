@@ -245,7 +245,8 @@
 ## 環境需求
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
-- 任一開發工具：Visual Studio 2022 以上、JetBrains Rider、VS Code
+- 任一開發工具：Visual Studio 2026、JetBrains Rider、VS Code
+  （`net10.0` 需要 Visual Studio 2026；Visual Studio 2022 只能 target `net9.0` 以下，無法開啟本系列的範例）
 - Docker（Day 19～25 與 Day 29 的整合測試範例需要：Testcontainers 與 .NET Aspire）
 
 ## 執行範例
@@ -261,12 +262,17 @@ dotnet test --solution Day01.FirstPrinciples.sln
 
 ## 測試框架說明
 
-範例使用 `xunit.v3.mtp-v2`（xUnit v3 的 Microsoft Testing Platform 模式），並採雙軌設定：
+範例使用 `xunit.v3.mtp-v2`，也就是 xUnit v3 走 Microsoft Testing Platform（MTP）的模式。測試專案是獨立的可執行檔，命令列的 `dotnet test` 依 `global.json` 裡的這段設定走 MTP：
 
-- **命令列**：`dotnet test` 依 `global.json` 的設定走 MTP
-- **IDE 測試總管**：Visual Studio 與 Rider 靠 `Microsoft.NET.Test.Sdk` 與 `xunit.runner.visualstudio` 走 VSTest 探索
+```json
+{
+  "test": { "runner": "Microsoft.Testing.Platform" }
+}
+```
 
-這是 xUnit 官方建議的過渡期做法——IDE 對 MTP 的支援還在跟進中，兩套並存可以讓命令列與測試總管都正常運作。
+這一段不能省。.NET 10 SDK 起，走 VSTest 路徑的 `dotnet test` 已經不再支援，少了它會直接失敗，而不是退回舊行為。
+
+測試專案不需要 `Microsoft.NET.Test.Sdk` 或 `xunit.runner.visualstudio`。早期 IDE 測試總管只認 VSTest，得靠這兩個套件才探索得到測試；現在 Visual Studio 2026 與 JetBrains Rider 都能直接探索並執行 MTP 專案，不必再多帶這一組相依。
 
 ## 套件版本
 

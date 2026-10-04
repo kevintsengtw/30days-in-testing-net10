@@ -27,27 +27,27 @@ day25/
 | 套件／工具 | 版本 |
 | --- | --- |
 | .NET SDK | 10.0.300，`latestFeature` |
-| Aspire AppHost、Hosting、Testing、client integrations | 13.4.6 |
-| xUnit MTP v2 | 3.2.2 |
-| Microsoft Testing Platform TRX | 2.3.2 |
-| PostgreSQL image | 18.3（Aspire 13.4 預設值，測試有實際驗證） |
-| Redis image | 8.6（Aspire 13.4 預設值，測試期間由 Docker 實際核對） |
+| Aspire AppHost、Hosting、Testing、client integrations | 13.5.3 |
+| xUnit MTP v2 | 4.0.0 |
+| Microsoft Testing Platform TRX | 2.4.0 |
+| PostgreSQL image | 18.3（Aspire 13.5 預設值，測試有實際驗證） |
+| Redis image | 8.6（Aspire 13.5 預設值，測試期間由 Docker 實際核對） |
 | Npgsql | 10.0.3 |
-| StackExchange.Redis | 3.0.17 |
+| StackExchange.Redis | 3.1.31 |
 | Dapper | 2.1.79 |
 | FluentValidation | 12.1.1 |
-| AwesomeAssertions | 9.5.0 |
-| AwesomeAssertions.Web | 1.9.6 |
+| AwesomeAssertions | 9.6.0 |
+| AwesomeAssertions.Web | 2.0.3 |
 | Respawn | 7.0.0 |
 | Flurl.Http | 4.0.2 |
 
-`Microsoft.AspNetCore.OpenApi` 10.0.10 會帶入具有高嚴重性公告的 `Microsoft.OpenApi` 2.0.0，因此 per-day CPM 將它釘選到相容的 2.x 最新穩定版 2.11.0。這項釘選已通過完整 API 測試與 NuGet 弱點稽核。
+`Microsoft.OpenApi` 是 `Microsoft.AspNetCore.OpenApi` 帶進來的，程式碼沒有直接用到。早期版本會拉到命中高嚴重性公告的 2.0.0，這是當初釘選的原因；10.0.11 已把相依區間收成 `[2.7.5, 3.0.0)`，10.0.12 再把下限拉到 2.12.0，框架自己就不會再解析到那一版。per-day CPM 仍明確釘到區間內的 2.12.2，讓實際裝的版本一目了然。不升 3.x——那落在區間之外。
 
 ## 前置需求
 
 - .NET 10 SDK
 - Docker Desktop 或可用的 Docker daemon
-- Aspire CLI 13.4.6（執行測試不是必要條件，但可用 `aspire doctor` 檢查環境）
+- Aspire CLI 13.5.3（執行測試不是必要條件，但可用 `aspire doctor` 檢查環境）
 
 本機 `aspire doctor` 會提示 HTTPS 開發憑證未受信任。整合測試明確使用 AppHost 的 `http` endpoint，因此不依賴受信任的 HTTPS 開發憑證。
 
@@ -120,7 +120,7 @@ Redis ────────────────────────�
 
 ## 實測結果
 
-環境：.NET SDK 10.0.302、Aspire 13.4.6、Docker 29.6.2。
+遷移當時的環境：.NET SDK 10.0.302、Aspire 13.4.6、Docker 29.6.2。2026-10-04 改用 Aspire 13.5.3、.NET SDK 10.0.401、Docker 29.8.1 重跑，16／16 通過，耗時 32.0 秒。
 
 | 執行 | Total | Passed | Failed | Skipped | Duration |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -142,9 +142,9 @@ dotnet list Day25.AspireIntegration.sln package --deprecated --include-transitiv
 dotnet list Day25.AspireIntegration.sln package --vulnerable --include-transitive
 ```
 
-結果：
+2026-10-04 的結果：
 
-- Direct outdated：0
+- Direct outdated：10 個套件（Aspire 五個套件 13.6.0、`Dapper` 2.1.89、`StackExchange.Redis` 3.3.1、`AwesomeAssertions.Web` 2.0.4、`xunit.v3.mtp-v2` 4.0.1、`Microsoft.Testing.Extensions.TrxReport` 2.4.1）。版本跟 Day24 和系列其他天數對齊，沒有逐版追
 - Deprecated（含遞移相依）：0
 - Vulnerable（含遞移相依）：0
 

@@ -42,9 +42,9 @@ Day09.PrivateInternalTesting/
 ## 使用的套件版本
 
 - .NET 10.0
-- xunit.v3.mtp-v2 3.2.2（Microsoft Testing Platform 模式）
+- xunit.v3.mtp-v2 4.0.0（Microsoft Testing Platform 模式）
 - NSubstitute 6.2.0
-- AwesomeAssertions 9.5.0
+- AwesomeAssertions 9.6.0
 
 ## 核心概念展示
 
@@ -165,7 +165,7 @@ dotnet test --filter-class "Day09.Tests.PriceCalculatorTests"
 ### 實務決策框架
 
 - **複雜度閾值**：超過 10 行且邏輯複雜
-- **維護性優於覆蓋率**：避免脆弱的測試
+- **維護性優於涵蓋率**：避免脆弱的測試
 - **業務價值導向**：專注於有價值的測試案例
 
 ## 注意事項

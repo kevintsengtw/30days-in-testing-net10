@@ -47,12 +47,12 @@ Day17.FileSystemTesting/
 
 ### 測試專案 (Day17.FileSystemTesting.Tests)
 
-- **xunit.v3.mtp-v2 3.2.2**: 單元測試框架（Microsoft.Testing.Platform 模式）
-- **AwesomeAssertions 9.5.0**: 斷言庫
+- **xunit.v3.mtp-v2 4.0.0**: 單元測試框架（Microsoft.Testing.Platform 模式）
+- **AwesomeAssertions 9.6.0**: 斷言庫
 - **NSubstitute 6.2.0**: Mock 框架
 - **Microsoft.Extensions.TimeProvider.Testing 10.9.0**: 可控制時間的測試工具
 - **System.IO.Abstractions.TestingHelpers 22.2.0**: 測試輔助工具
-- **Microsoft.Testing.Extensions.TrxReport 2.3.3**: TRX 測試報告
+- **Microsoft.Testing.Extensions.TrxReport 2.4.0**: TRX 測試報告
 
 ## 核心功能
 

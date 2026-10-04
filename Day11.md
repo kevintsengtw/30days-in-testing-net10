@@ -7,8 +7,6 @@ packages:
   - AutoFixture
   - AwesomeAssertions
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
   - Microsoft.Testing.Extensions.TrxReport
 ---
 
@@ -970,8 +968,8 @@ Day 10 講的是 AutoFixture 的基本用法，今天補上自訂建構器和泛
 本章範例使用以下套件版本：
 
 - **AutoFixture**: 4.18.1
-- **xunit.v3.mtp-v2**: 3.2.2
-- **AwesomeAssertions**: 9.5.0
+- **xunit.v3.mtp-v2**: 4.0.0
+- **AwesomeAssertions**: 9.6.0
 - **.NET**: 10.0
 
 這些版本是本文範例實際使用的組合。AutoFixture 4.18.1 支援 DataAnnotations 與自訂建構器。

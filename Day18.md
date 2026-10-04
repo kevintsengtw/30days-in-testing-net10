@@ -10,8 +10,6 @@ packages:
   - Microsoft.Testing.Extensions.TrxReport
   - NSubstitute
   - xunit.v3.mtp-v2
-  - xunit.runner.visualstudio
-  - Microsoft.NET.Test.Sdk
 ---
 
 # Day 18 - 驗證測試：FluentValidation Test Extensions
@@ -423,9 +421,6 @@ FluentValidation 是個流行的 .NET 驗證框架，它有這些特色：
         <PackageReference Include="NSubstitute"/>
         <PackageReference Include="xunit.v3.mtp-v2"/>
 
-        <!-- IDE 測試總管相容：Rider 的 xUnit 探索需要 Microsoft.NET.Test.Sdk，VSTest 路徑另需 xunit.runner.visualstudio -->
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="xunit.runner.visualstudio" />
     </ItemGroup>
 
     <ItemGroup>

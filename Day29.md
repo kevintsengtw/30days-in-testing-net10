@@ -265,7 +265,9 @@ Native AOT 只適合所有相依套件都能通過 AOT 分析的測試專案。`
 
 ## 套件安全稽核
 
-這次驗證發現 `Microsoft.AspNetCore.OpenApi` 間接帶入 `Microsoft.OpenApi 2.0.0`，命中高嚴重性公告 CVE-2026-49451。依官方公告，2.x 修補版本為 2.7.5，因此範例透過 Central Package Management 固定到 2.7.5。
+`Microsoft.OpenApi` 是 `Microsoft.AspNetCore.OpenApi` 間接帶進來的。早期版本會拉到 2.0.0，命中高嚴重性公告 CVE-2026-49451，範例因此用 Central Package Management 把它釘住。
+
+`Microsoft.AspNetCore.OpenApi` 10.0.11 已經把相依區間收成 `[2.7.5, 3.0.0)`，10.0.12 再把下限拉到 2.12.0，框架自己就不會再解析到有問題的版本。釘選還是留著，釘的是區間內的 2.12.2——目的從「避開弱點」變成「明確固定版本」，免得跟著區間浮動。
 
 測試全部通過不代表 dependency 沒有風險。CI 至少要保留：
 
